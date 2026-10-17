@@ -88,11 +88,37 @@ bash tools/setup_toolchain.sh                     # NDK r27d, CMake, Ninja, Boos
 bash bridge/tools/make_release.sh                 # -> dist/AngryBirdsStarWarsII-arm64.apk
 bash bridge/tools/make_release.sh x86_64          # emulator build -> test-out/
 bash bridge/tools/dev_cycle.sh x86_64             # build, install, launch, filtered log
+MAX_FPS=60 bash bridge/tools/make_release.sh arm64-v8a dist/AngryBirdsStarWarsII-arm64-60fps.apk
+UNLOCKED=1 MAX_FPS=60 bash bridge/tools/make_release.sh arm64-v8a dist/AngryBirdsStarWarsII-arm64-unlocked-60fps.apk
+UNLOCKED=1 bash bridge/tools/make_release.sh arm64-v8a dist/AngryBirdsStarWarsII-arm64-unlocked-120fps.apk
 ```
 
 The APK is signed with `keystore/absw2-local.keystore` (created on first build). Keep it: Android only
 installs an update over an existing install when the signature matches. The package name is unchanged, so
-this build replaces any other copy of `com.rovio.angrybirdsstarwarsii.ads`.
+this build replaces any other copy of `com.rovio.angrybirdsstarwarsii.ads`. All variants share the package
+and the save, so installing one over another keeps the progress.
+
+### Unlocked variant (`UNLOCKED=1`)
+
+Rovio's store, wallet and cloud services are gone, so what the game sold can no longer be bought. With
+`UNLOCKED=1` the build adds `bridge/lua/unlocked/settingsWrapper.lua`, which at every start, after the save is
+loaded (`SettingsWrapper.increaseNumberOfStartups`, from the `EID_GAME_INITIALIZED` listener):
+
+- gives each of the 56 characters the shop sells as permanent the most permanent units the shop sells, 4
+  (each unit is one use of that character in every level; the shop then says the maximum is owned);
+- enables the opposite side's characters in every level of both sides (sold for 299 coins per side);
+- removes ads and marks the player as a paying customer, as any purchase did;
+- sets the coins to 9999999, and caps every later gain (`SettingsWrapper.addAmount("coins", n)`, the path of
+  stars, quests, hidden coins, carbonite and Jenga codes) so that the total never goes above it. Spending
+  works as usual until the next start. The coin counters in the save are rewritten to exactly the cap, so they
+  do not grow from start to start.
+
+Progression is unchanged: levels, episodes, the other side (stars) and timed levels open by playing. No
+episode of this version is sold (none has `iapPurchase` metadata). The engine's Lua numbers are 32-bit floats,
+exact for integers up to 16777216; 9999999 stays exact and fits the coin counter. Checked on the emulator: the
+log line `[absw2] unlocked: coins 9999999, permanent characters 56 new of 56, ...`, the counter, a purchase
+(9999199), the shop's maximum-permanents message, and with a test build, +12345 at the cap and -1000 then
++5000 both ending at 9999999. These changes stay in the save if a normal build is installed afterwards.
 
 ### Display
 

@@ -6,6 +6,8 @@
 #   resolution: ABSW2 lays its UI out for the screen size, so a cap only lowers sharpness.
 #   MAX_FPS=N caps the frame rate. The default 120 matches 120 Hz screens; 60 halves the emulated work
 #   (and heat); 0 follows the display. adb shell setprop debug.absw.max_fps N overrides it per device.
+#   UNLOCKED=1 adds bridge/lua/unlocked: what the shop sold is owned and the coins are set to their cap
+#   at every start (see bridge/lua/unlocked/settingsWrapper.lua). Progression is unchanged.
 # Inputs: original/absw2_ads_1.9.25.apk (com.rovio.angrybirdsstarwarsii.ads 1.9.25, unmodified)
 #         original/absw2_ads_files.zip  (files/ of a device that had downloaded the cloud assets)
 set -euo pipefail
@@ -31,7 +33,9 @@ grep -E "^$ABI:" "$ROOT/test-out/build.log"
 OV="$ROOT/bridge/out/overlay"
 rm -rf "$OV"
 mkdir -p "$OV/lua" "$OV/cloud"
-wsl.exe -e bash -lc "python3 -I $W/bridge/tools/build_lua_patches.py $W/original/$(basename "$BASE") $W/bridge/lua/offline $W/bridge/out/overlay/lua"
+PATCHES="$W/bridge/lua/offline"
+if [ "${UNLOCKED:-0}" = 1 ]; then PATCHES="$PATCHES $W/bridge/lua/unlocked"; fi
+wsl.exe -e bash -lc "python3 -I $W/bridge/tools/build_lua_patches.py $W/original/$(basename "$BASE") $PATCHES $W/bridge/out/overlay/lua"
 python -I "$ROOT/tools/stage_cloud_data.py" "$(cygpath -w "$DATA")" "$(cygpath -w "$OV/cloud")"
 python -I "$ROOT/bridge/tools/package_apk.py" "$(cygpath -w "$BASE")" "$(cygpath -w "$OUT")" \
   --bridge-out "$(cygpath -w "$ROOT/bridge/out")" --abi "$ABI" \

@@ -7,6 +7,99 @@ with the files it used to download from Rovio's servers, which are now shut down
 
 Do not distribute the generated APK or anything under `original/`, `work/` or `keystore/`.
 
+## Install on a phone
+
+You need a 64-bit Android phone with Android 8.0 or newer. The screenshots come from a Samsung Galaxy
+(One UI) with the Google Play Store; other phones have the same steps under similar names.
+
+### 1. Download the APK
+
+1. On the phone, open this repository's **Releases** page (you need access to the repository) and open the
+   latest release.
+2. Under **Assets**, tap the APK you want:
+
+   | File | Frame rate | Unlocked |
+   | --- | --- | --- |
+   | `AngryBirdsStarWarsII-arm64.apk` | 120 fps | No |
+   | `AngryBirdsStarWarsII-arm64-60fps.apk` | 60 fps, less heat | No |
+   | `AngryBirdsStarWarsII-arm64-unlocked-120fps.apk` | 120 fps | Yes |
+   | `AngryBirdsStarWarsII-arm64-unlocked-60fps.apk` | 60 fps | Yes |
+
+   The unlocked builds own everything the shop sold and keep the coins at 9,999,999 (see
+   [Unlocked variant](#unlocked-variant-unlocked1)).
+3. Wait until the download finishes (about 66 MB).
+
+### 2. Remove copies from other sources
+
+Android installs an APK over an installed app only when both are signed with the same key. All builds
+from this project share one key, so they replace each other and keep the progress. If the phone has
+Angry Birds Star Wars II from somewhere else (Google Play, another website), uninstall it first:
+**Settings > Apps > Angry Birds > Uninstall**. Uninstalling deletes that copy's progress.
+
+### 3. Turn off the manufacturer's blocker (Samsung Auto Blocker)
+
+Auto Blocker only allows apps from the Play Store or the Galaxy Store, and it also blocks commands over USB.
+
+1. Open **Settings > Security and privacy > Auto Blocker**.
+2. Turn it **Off**.
+3. Leave **Turn on automatically** on, so that Auto Blocker turns itself back on after 30 minutes.
+
+<img src="docs/install/samsung-auto-blocker.jpg" alt="Auto Blocker turned off, with Turn on automatically still on" width="300">
+
+On other brands, if the installer says that a security feature blocked the app, look for a similar
+option under **Settings > Security**.
+
+### 4. Turn off Play Protect scanning
+
+Play Protect can block apps that did not come from the Play Store.
+
+1. Open the **Play Store**, tap your profile picture (top right), then tap **Play Protect**.
+
+   <img src="docs/install/play-store-menu.jpg" alt="Play Store menu with the Play Protect entry" width="300">
+
+2. Tap the gear icon (top right) to open **Play Protect settings**.
+3. Turn off **Scan apps with Play Protect**. Turning off **Improve harmful app detection** as well keeps
+   the phone from uploading the APK to Google.
+
+   <img src="docs/install/play-protect-settings.jpg" alt="Play Protect settings with both switches" width="300">
+
+If you leave scanning on and Play Protect shows a warning while installing, tap **More details** and then
+**Install anyway**.
+
+### 5. Install the APK
+
+1. Open the downloaded file from the browser's downloads or the **Files** app.
+2. The first time, Android says that this source is not allowed to install unknown apps. Tap **Settings**,
+   turn on **Allow from this source**, and go back.
+3. Tap **Install**. The app appears on the home screen as **Angry Birds**.
+
+### 6. First start
+
+- The screen stays black for about a second while the engine starts.
+- Android may say that the app was built for an older version of Android. Tap **OK**: this is expected
+  for this old game.
+- The game offers to turn your internet on. Close that message: Rovio's servers are gone, so the game runs
+  offline and your Rovio account stays a guest account.
+
+### 7. Turn the protections back on
+
+- **Play Store > profile picture > Play Protect > gear icon**: turn **Scan apps with Play Protect** back on.
+- Auto Blocker turns itself back on after 30 minutes if **Turn on automatically** stayed on. Otherwise
+  turn it on again in **Settings > Security and privacy > Auto Blocker**.
+
+### Updating
+
+Download the newer APK and repeat steps 3 to 5. The new build replaces the old one and keeps your progress.
+
+### Troubleshooting
+
+- **App not installed** or **package conflicts with an existing package**: a copy signed with another key
+  is installed. See step 2.
+- **There was a problem parsing the package**: the download is incomplete. Download the APK again.
+- The game needs a 64-bit phone. Phones that can still run 32-bit apps can use the original game instead.
+- To report a crash, connect the phone to a computer with USB debugging on and run `adb logcat -d > log.txt`
+  right after the crash. Auto Blocker must be off, because it blocks USB commands.
+
 ## Inputs (`original/`, never committed)
 
 | File | What it is |

@@ -3,6 +3,8 @@
 
 #include <cstdint>
 #include <initializer_list>
+#include <optional>
+#include <string>
 #include <vector>
 
 namespace Dynarmic::A32 {
@@ -42,9 +44,20 @@ uint32_t thread_tls();        // guest TLS block of the calling host thread
 uint32_t thread_errno_addr(); // guest errno slot of the calling host thread
 void set_guest_errno(int e);
 
+// Profiling: guest address of the compiled block that contains host_pc, if host_pc lies in the code
+// cache of one of the calling thread's JITs. Call it from that thread, outside signal handlers.
+std::optional<uint32_t> guest_block_for_host_pc(const void* host_pc);
+
+// Profiling: dynarmic IR and emitted host code of the calling thread's blocks starting at guest pc.
+std::string dump_block(uint32_t pc);
+
 // Run `fn(arg)` as the body of a new guest thread on the calling host thread.
 uint32_t run_thread_entry(uint32_t fn, uint32_t arg);
 
 [[noreturn]] void dump_and_die(Dynarmic::A32::Jit* jit, const char* why);
+
+// Diagnostics: logs the words among the `words` above guest sp that point into a loaded module (return
+// addresses, mostly).
+void log_guest_stack(uint32_t sp, int words);
 
 }  // namespace cpu

@@ -19,6 +19,7 @@ grep -q "absw: smt_width guard" "$XU" || sed -i \
 grep -q "absw: smt_width guard 2" "$XU" || sed -i \
   's|coresSharignDataCache_\[dataCacheLevels_\] = local::max_(actual_logical_cores / smt_width, 1u);|coresSharignDataCache_[dataCacheLevels_] = local::max_(smt_width ? actual_logical_cores / smt_width : actual_logical_cores, 1u); /* absw: smt_width guard 2 */|' "$XU"
 grep -q "absw: smt_width guard 2" "$XU" || { echo "xbyak patch failed"; exit 1; }
+python3 -I "$HERE/tools/patch_dynarmic.py" "$T/src/dynarmic"
 
 # 1. Guest runtime: ARM32 shared object, no libc; imports resolve to host thunks at load time.
 GB="$T/build/absw2-guest"

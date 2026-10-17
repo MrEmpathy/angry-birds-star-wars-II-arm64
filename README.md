@@ -109,13 +109,101 @@ Each host thread that runs guest code has its own dynarmic JIT. The game logic r
 get 16 MiB. Guest threads are renamed `absw2-g<id>`; otherwise the kernel keeps the creator's name. Before
 this change, about 15 worker threads each reserved 96 MiB.
 
+### Performance and heat
+
+The release build runs at the screen's native resolution and up to 120 frames per second. Measured on a
+Galaxy S26 Ultra (Android 16, 3120x1440, adaptive 120 Hz) in Naboo 1-1, firing a bird every 10 s, 3 minutes
+per run, with the rendering thread kept on cores 0-5 (one cluster, one clock) so that runs compare:
+
+| JIT code generation | Rendering thread, cycles per second | CPU time per frame | Core clock |
+| --- | --- | --- | --- |
+| Fast dispatch only (two runs) | 2363 M, 2412 M | 6.24 ms, 6.23 ms | 3.2 GHz |
+| + relaxed halt check | 2364 M | 6.37 ms | 3.1 GHz |
+| + host FPSR | 1975 M | 5.93 ms | 2.8 GHz |
+| + host FPSR + relaxed halt check (release, three runs) | 1924 M, 1890 M, 1889 M | 5.92, 5.85, 5.89 ms | 2.7 GHz |
+
+Cycles are thread CPU time multiplied by the sampled clock of the core the thread ran on (Android does not
+let apps open hardware counters). CPU time alone hides most of the gain: with less work the governor lowers
+the clock, so the thread stays similarly busy at a lower frequency and voltage.
+
+- **Host FPSR** (dynarmic patch 5, `OptimizationFlag::Unsafe_HostFpsr`). Upstream clears the host FPSR before
+  the floating-point instructions of every block and merges it back afterwards, so that the guest's
+  cumulative exception flags are exact. Writing FPSR serializes the pipeline: in the instruction-level profile
+  (below) the instruction at or right after `msr fpsr` was about a quarter of the rendering thread's samples, mostly in the
+  Lua interpreter, whose numbers are floats. The patch keeps the guest's flags in the host FPSR while JIT code
+  runs. The game never reads or writes FPSCR except the compare flags (`vmrs APSR_nzcv, fpscr`, 2602 sites,
+  kept apart), so nothing it can observe changes.
+- **Relaxed halt check** (dynarmic patch 6). The halt checks between blocks used `ldar`, at 10% of the
+  samples; a plain load is enough there. Alone it is within noise; with the host FPSR it saves about 4% more.
+- **Fast dispatch in dynarmic's arm64 backend** (patches 2 and 3). Upstream leaves `FastDispatchHint`
+  unimplemented on arm64, and A32 ALU writes to PC (`addls pc, pc, rN, lsl #2`, the jump tables of `switch`
+  statements) always went through `ReturnToDispatch`. Every bytecode of the game's Lua interpreter
+  (`luaV_execute`, the hottest guest code) took that path: a call into C++ and a hash map lookup, 15-18% of the
+  rendering thread. A per-JIT direct-mapped cache now resolves these branches in emitted code.
+- **Native WebP decoding** (`bridge/src/webp.cpp`). The engine decodes its WebP textures with its own ARM32
+  copy of libwebp 0.5 through `WebPDecode`. The bridge redirects that function to Android's `AImageDecoder`
+  (the platform's arm64 libwebp) and converts to the requested pixel layout. Calls it cannot serve the same
+  way (other output modes, decoding options, ICC or EXIF data, animation) run the original code. Cold start to
+  the first frame: 958 ms instead of 1212 ms (three starts each); the first 7 images take 112 ms instead of
+  about 460 ms. `adb shell setprop debug.absw.native_webp 2` decodes every image both ways and logs the
+  difference: 0 bytes in all 13 images of the menu and Naboo 1-1.
+- **ADPF** (`bridge/src/hint.cpp`). The rendering thread reports each frame's CPU time to a performance hint
+  session (Android 13+) with the frame period as the target, preferring power efficiency (Android 15+).
+  About 7% fewer cycles at 120 fps in one comparison. `debug.absw.adpf 0` turns it off.
+- **Frame rate** (`bridge/src/display.cpp`). The window asks the display for the frame rate in the APK asset
+  `absw/max_fps` (`make_release.sh` writes 120; `MAX_FPS=60` for less heat), and `pace_frame` caps the GL
+  thread there if a device ignores the request. `adb shell setprop debug.absw.max_fps N` overrides it; 0 turns
+  the cap off.
+- **Read-only guest memory** (`IsReadOnlyMemory`): code, `.rodata` and the relocated GOT are reported as
+  constant, so the JIT can fold literal-pool loads.
+- **Black window background** while the engine starts, instead of the theme's grey.
+
+Each code generation change can be turned off for measurements from the next launch:
+`adb shell setprop debug.absw.jit_host_fpsr 0`, `debug.absw.jit_relaxed_halt 0`, `debug.absw.jit_fast_dispatch 0`
+(the bridge logs `jit: code generation options turned off: ...`).
+
+### Profiling
+
+`adb shell setprop debug.absw.perf 1`, then restart the game. Every 5 s the bridge logs frames per second, CPU
+and import time per frame, process CPU, the most expensive imports and a sampling profile of the rendering
+thread (1 ms of its CPU time per sample): guest JIT blocks as `libAngryBirdsStarWarsII.so+offset` (map them to
+functions with Ghidra; the image base there is 0x10000), host libraries, and offsets inside the bridge
+(`llvm-symbolizer --obj=bridge/out/arm64-v8a/libAngryBirdsStarWarsII.debug.so <offsets>` from the same build).
+nativeInit and the first frame get their own profiles. The start-up timeline (`startup:` and `lifecycle:`
+lines) is always logged.
+
+For code generation work, each profile also classifies the emitted arm64 instruction at each JIT sample and
+the one before it (`perf:   JIT at pc:`, e.g. `msr fpsr`, `ldar`, loads and stores), and
+`adb shell setprop debug.absw.perf_dump <new value>` logs the IR and host code of the six hottest blocks once
+(`perfdump:` lines). `debug.absw.perf_cpus <hex mask>` keeps the rendering thread on those cores, so that CPU
+time multiplied by clock compares between runs.
+
 ## Debugging
 
 Logs use the tags `absw` (bridge) and `absw-guest` (engine stdout and `_G.print` from patches). A guest crash
 inside the memory callbacks logs `guest context:` with the guest PC, LR, registers and code addresses on the
-stack. A thread that joins itself is logged with its entry point and caller.
+stack. A thread that joins itself is logged with its entry point, caller and code addresses on its stack, and
+then parked (`bridge/src/hle_pthread.cpp`): the Rovio cloud SDK's HTTP reactor is sometimes released by its own
+event loop when a request fails, and its destructor joins the loop's thread. Treating that join as a detach
+let the destructor free the reactor under the running loop (SIGSEGV on guest address 0 about 350 ms later).
 
-## Status (2026-10-16)
+Install test builds on a phone with `adb install -r --no-incremental --user 0`. Without `--user 0` the app is
+also installed into other profiles, such as Samsung's Dual Messenger (user 95), which shows a second icon. On 2026-10-17 a streamed install lost
+its USB connection (Samsung Auto Blocker) and Android removed the installed game together with its progress.
+
+## Status (2026-10-17)
+
+On the Galaxy S26 Ultra with the arm64 build: cold start to the first frame in about 0.96 s with a black
+screen, main menu, Naboo 1-1 at native resolution and 120 frames per second (minimum 5 s window 117 fps) in
+3-minute sessions, AP temperature 40-44 °C. The user's own progress survived several reinstalls of test builds
+(until the removal noted under Debugging).
+
+The self-join crash happened in 2 of about 10 launches of measurement sessions right after an install, and in
+none of about 30 other launches; its trigger is unknown. It predates the JIT changes: a phone crash with the
+same signature on 2026-10-16 (after 26 minutes of play) and the emulator crash below. The parking fix has not
+yet met a real occurrence.
+
+Earlier checks (2026-10-16):
 
 Verified on the Android 36 emulator, 64-bit only (`x86_64,arm64-v8a`), with the x86_64 build:
 
@@ -134,4 +222,4 @@ Verified on the Android 36 emulator, 64-bit only (`x86_64,arm64-v8a`), with the 
 The arm64 build (`dist/AngryBirdsStarWarsII-arm64.apk`) under the emulator's ARM translation reaches the
 loading screen and handles the Rovio ID failure. Then the emulator's translator aborts
 (`binary_translation/base/mmap_posix.cc: CHECK failed`, an mmap failure in a 4 GB AVD on a host with under
-1 GB free). On a phone the bridge runs natively, without that layer. **Not tested on a real phone yet.**
+1 GB free). On a phone the bridge runs natively, without that layer.

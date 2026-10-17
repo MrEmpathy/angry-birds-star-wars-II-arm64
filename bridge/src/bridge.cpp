@@ -12,7 +12,9 @@
 #include "elf32.h"
 #include "hle.h"
 #include "jni_bridge.h"
+#include "perf.h"
 #include "seed.h"
+#include "webp.h"
 
 namespace {
 
@@ -53,6 +55,8 @@ extern "C" JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void*) {
 #else
     LOGI("absw2 ARM32 bridge starting (host x86_64)");
 #endif
+    perf::init();
+    perf::mark("bridge JNI_OnLoad");
     seed::copy_missing_files(env);
     arena::init();
     cpu::init();
@@ -66,7 +70,9 @@ extern "C" JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void*) {
     std::vector<uint8_t> image = read_file(path);
     if (image.empty()) fatal("cannot read guest library %s", path.c_str());
     elf::Module* game = elf::load("libAngryBirdsStarWarsII.so", image.data(), image.size());
+    webp::install(game);
     elf::run_init(game);
+    perf::mark("guest constructors done");
 
     int bound = jni::bind_exports(env);
     LOGI("bound %d native methods", bound);
@@ -77,5 +83,6 @@ extern "C" JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void*) {
         version = static_cast<jint>(cpu::call(it->second, {jni::guest_vm(), 0}));
         LOGI("guest JNI_OnLoad returned 0x%x", version);
     }
+    perf::mark("bridge JNI_OnLoad done");
     return version;
 }

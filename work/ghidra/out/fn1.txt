@@ -1,0 +1,18 @@
+0x4bbf64 -> FUN_004bbf64 @ 004bbf64 size 40
+0x4bb290 -> FUN_004bb244 @ 004bb244 size 328
+0x4b1f84 -> FUN_004b1f30 @ 004b1f30 size 588
+0x4b1f30 -> FUN_004b1f30 @ 004b1f30 size 588
+0x4ba454 -> FUN_004ba424 @ 004ba424 size 268
+0x4bed38 -> FUN_004bebf8 @ 004bebf8 size 9008
+0x4b44ac -> FUN_004b44ac @ 004b44ac size 3820
+0x4bec7c -> FUN_004bebf8 @ 004bebf8 size 9008
+0x4b6be4 -> FUN_004b6be4 @ 004b6be4 size 96
+0x4ae050 -> FUN_004ae050 @ 004ae050 size 336
+0x4bfb84 -> FUN_004bebf8 @ 004bebf8 size 9008
+0x4bf180 -> FUN_004bebf8 @ 004bebf8 size 9008
+0x4b5b54 -> FUN_004b5b54 @ 004b5b54 size 184
+0x4b1084 -> FUN_004b1050 @ 004b1050 size 180
+0x4ae9b8 -> FUN_004ae978 @ 004ae978 size 360
+0x4bc5f0 -> FUN_004bc5c8 @ 004bc5c8 size 296
+0x14f3c8 -> ?
+0x4be65c -> FUN_004be65c @ 004be65c size 456

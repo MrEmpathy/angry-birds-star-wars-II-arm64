@@ -296,16 +296,18 @@ int32_t g_pthread_join(cpu::Ctx* c, uint32_t id, GPtr<uint32_t> ret) {
     auto t = find_thread(id);
     if (!t) return ESRCH;
     if (pthread_equal(t->host, pthread_self())) {
-        // The game's old libstdc++ joins a std::thread from that same thread when the thread drops the
-        // last owner itself (a timing race that emulation's cold per-thread JIT makes likely). Treat it
-        // as a detach: the thread finishes normally and releases its resources on exit.
-        LOGW("self-join of guest thread 0x%x (entry %s, joined from %s) treated as detach", id,
+        // A thread joins itself when it drops the last owner of the object that owns it: the Rovio cloud
+        // SDK's HTTP reactor is released by its own event loop (with the reactor's mutex held) when a request
+        // fails, and its destructor stops the loop and joins the loop's thread. That is a race in the game;
+        // on Android, pthread_join returns EDEADLK and libstdc++ throws from the destructor (std::terminate).
+        // Returning as if joined let the destructor free the reactor while the loop further down this stack
+        // still used it, which crashed a few hundred milliseconds later. The thread is parked instead: the
+        // rest of the destructor never runs, so the object leaks with its mutex held, but no other thread can
+        // reach that object any more.
+        LOGW("self-join of guest thread 0x%x (entry %s, joined from %s): parking the thread", id,
              elf::describe(t->start).c_str(), elf::describe(c->r(14)).c_str());
-        pthread_detach(t->host);
-        std::lock_guard l(g_thr_mu);
-        g_threads.erase(id);
-        if (ret) *ret.h() = 0;
-        return 0;
+        cpu::log_guest_stack(c->r(13), 160);
+        for (;;) pause();
     }
     int r = checked(pthread_join(t->host, nullptr), "pthread_join", c);
     if (r == 0 && ret) *ret.h() = t->result;

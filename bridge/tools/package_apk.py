@@ -16,6 +16,7 @@ import zipfile
 GUEST_SRC = "lib/armeabi-v7a/libAngryBirdsStarWarsII.so"
 DROP_PREFIXES = ("lib/armeabi/", "lib/armeabi-v7a/", "lib/x86/", "lib/mips/")
 RENDER_HEIGHT_ASSET = "assets/absw/render_height"  # read by bridge/src/display.cpp
+MAX_FPS_ASSET = "assets/absw/max_fps"  # read by bridge/src/display.cpp
 ASSET_INDEX = "assets/assets.list"  # the engine's index of APK assets; rebuilt when entries are added
 
 
@@ -85,6 +86,8 @@ def main():
                     help="directory whose files replace or add APK entries (repeatable; Lua patches, cloud data)")
     ap.add_argument("--render-height", type=int, choices=range(0, 8193), metavar="0..8192",
                     help="bridge render height for this APK (0 = native resolution); the bridge default is 1080")
+    ap.add_argument("--max-fps", type=int, choices=range(0, 1001), metavar="0..1000",
+                    help="frame rate cap for this APK (0 = none, follow the display); the bridge default is 60")
     args = ap.parse_args()
     abis = args.abi or ["arm64-v8a"]
 
@@ -96,6 +99,8 @@ def main():
             overlay[name] = data
     if args.render_height is not None:
         overlay[RENDER_HEIGHT_ASSET] = f"{args.render_height}\n".encode()
+    if args.max_fps is not None:
+        overlay[MAX_FPS_ASSET] = f"{args.max_fps}\n".encode()
 
     out = pathlib.Path(args.out).resolve()
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -114,7 +119,8 @@ def main():
         subprocess.run(["keytool", "-genkeypair", "-keystore", str(ks), "-alias", "absw", "-keyalg", "RSA",
                         "-keysize", "2048", "-validity", "10000", "-dname", "CN=absw local build",
                         "-storepass", "absw-local", "-keypass", "absw-local"], check=True)
-    subprocess.run([str(bt / f"apksigner{bat}"), "sign", "--ks", str(ks), "--ks-pass", "pass:absw-local",
+    subprocess.run([str(bt / f"apksigner{bat}"), "sign", "--v4-signing-enabled", "false",
+                    "--ks", str(ks), "--ks-pass", "pass:absw-local",
                     "--ks-key-alias", "absw", "--out", str(out), str(aligned)], check=True, shell=os.name == "nt")
     unsigned.unlink()
     aligned.unlink()

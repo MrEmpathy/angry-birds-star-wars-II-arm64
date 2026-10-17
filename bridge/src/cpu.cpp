@@ -3,6 +3,7 @@
 #include <dlfcn.h>
 #include <pthread.h>
 #include <sys/prctl.h>
+#include <sys/system_properties.h>
 #include <ucontext.h>
 #include <signal.h>
 #include <unistd.h>
@@ -14,6 +15,7 @@
 #include <cstdarg>
 #include <memory>
 #include <mutex>
+#include <string>
 
 #include <dynarmic/interface/A32/a32.h>
 #include <dynarmic/interface/A32/config.h>
@@ -83,6 +85,8 @@ struct Callbacks final : Dynarmic::A32::UserCallbacks {
     }
 
     std::optional<uint32_t> MemoryReadCode(VAddr a) override { return rd<uint32_t>(a); }
+    // Lets the JIT fold loads from code, literal pools, .rodata and the relocated GOT into constants.
+    bool IsReadOnlyMemory(VAddr a) override { return elf::is_read_only(a); }
     uint8_t MemoryRead8(VAddr a) override { return rd<uint8_t>(a); }
     uint16_t MemoryRead16(VAddr a) override { return rd<uint16_t>(a); }
     uint32_t MemoryRead32(VAddr a) override { return rd<uint32_t>(a); }
@@ -102,6 +106,37 @@ struct Callbacks final : Dynarmic::A32::UserCallbacks {
     void AddTicks(uint64_t) override {}
     uint64_t GetTicksRemaining() override { return ~uint64_t{0} >> 2; }
 };
+
+// Code generation changes from bridge/tools/patch_dynarmic.py. Each is on by default; for measurements,
+// `adb shell setprop debug.absw.jit_<name> 0` turns one off from the next launch.
+struct JitOption {
+    const char* name;
+    Dynarmic::OptimizationFlag flag;
+};
+constexpr JitOption kJitOptions[] = {
+    {"fast_dispatch", Dynarmic::OptimizationFlag::FastDispatch},
+    {"host_fpsr", Dynarmic::OptimizationFlag::Unsafe_HostFpsr},
+    {"relaxed_halt", Dynarmic::OptimizationFlag::RelaxedHaltCheck},
+};
+
+Dynarmic::OptimizationFlag jit_optimizations() {
+    static const Dynarmic::OptimizationFlag flags = [] {
+        auto f = Dynarmic::all_safe_optimizations | Dynarmic::OptimizationFlag::Unsafe_HostFpsr;
+        std::string off;
+        for (const auto& o : kJitOptions) {
+            std::string prop = std::string("debug.absw.jit_") + o.name;
+            char v[PROP_VALUE_MAX] = {};
+            if (__system_property_get(prop.c_str(), v) > 0 && v[0] == '0') {
+                f &= ~o.flag;
+                off += ' ';
+                off += o.name;
+            }
+        }
+        LOGI("jit: code generation options turned off:%s", off.empty() ? " none" : off.c_str());
+        return f;
+    }();
+    return flags;
+}
 
 struct GuestCpu {
     Callbacks cb;
@@ -124,6 +159,8 @@ struct GuestCpu {
         cfg.enable_cycle_counting = false;
         cfg.define_unpredictable_behaviour = true;
         cfg.code_cache_size = cache;
+        cfg.optimizations = jit_optimizations();
+        cfg.unsafe_optimizations = true;  // only the unsafe flags jit_optimizations() sets
         jit = std::make_unique<Jit>(cfg);
     }
     ~GuestCpu() {
@@ -217,6 +254,14 @@ static uintptr_t host_pc(void* ctx) {
 // A fault inside this library (not in JIT code) is a guest access that the memory callbacks could not
 // serve, i.e. a real guest crash: log the guest thread's registers before the process dies. The JIT
 // writes the guest PC back at block boundaries, so pc is the start of the faulting block.
+void log_guest_stack(uint32_t sp, int words) {
+    for (int i = 0; i < words; ++i) {
+        uint32_t v;
+        memcpy(&v, arena::base + sp + 4 * i, 4);
+        if (elf::owns(v)) LOGE("  stack[%d] %s", i, elf::describe(v).c_str());
+    }
+}
+
 static void dump_guest_context(void* ctx) {
     Dl_info self{}, at{};
     if (!dladdr(reinterpret_cast<void*>(&fault_logger), &self) || !dladdr(reinterpret_cast<void*>(host_pc(ctx)), &at) ||
@@ -226,11 +271,7 @@ static void dump_guest_context(void* ctx) {
     LOGE("guest context: pc=%s lr=%s", elf::describe(R[15]).c_str(), elf::describe(R[14]).c_str());
     for (int i = 0; i < 16; i += 4)
         LOGE("r%-2d=%08x r%-2d=%08x r%-2d=%08x r%-2d=%08x", i, R[i], i + 1, R[i + 1], i + 2, R[i + 2], i + 3, R[i + 3]);
-    for (int i = 0; i < 64; ++i) {
-        uint32_t v;
-        memcpy(&v, arena::base + R[13] + 4 * i, 4);
-        if (elf::owns(v)) LOGE("  stack[%d] %s", i, elf::describe(v).c_str());
-    }
+    log_guest_stack(R[13], 64);
 }
 
 static void fault_logger(int sig, siginfo_t* info, void* ctx) {
@@ -355,6 +396,20 @@ uint64_t call(uint32_t fn, const std::vector<uint32_t>& words) {
     return R[0] | (uint64_t{R[1]} << 32);
 }
 
+std::optional<uint32_t> guest_block_for_host_pc(const void* host_pc) {
+    if (!t_state) return std::nullopt;
+    for (auto& c : t_state->cpus)
+        if (auto pc = c->jit->GuestBlockForHostPc(host_pc)) return pc;
+    return std::nullopt;
+}
+
+std::string dump_block(uint32_t pc) {
+    if (!t_state) return {};
+    std::string out;
+    for (auto& c : t_state->cpus) out += c->jit->DumpBlockForProfiling(pc);
+    return out;
+}
+
 uint32_t thread_tls() { return state().tls; }
 uint32_t thread_errno_addr() { return state().tls + 8; }  // TLS_SLOT_ERRNO
 void set_guest_errno(int e) { *arena::hp<int32_t>(thread_errno_addr()) = e; }
@@ -371,12 +426,7 @@ void dump_and_die(Jit* jit, const char* why) {
     for (int i = 0; i < 16; i += 4)
         LOGE("r%-2d=%08x r%-2d=%08x r%-2d=%08x r%-2d=%08x", i, R[i], i + 1, R[i + 1], i + 2, R[i + 2], i + 3, R[i + 3]);
     LOGE("cpsr=%08x", jit->Cpsr());
-    uint32_t sp = R[13];
-    for (int i = 0; i < 32; ++i) {
-        uint32_t v;
-        memcpy(&v, arena::base + sp + 4 * i, 4);
-        if (elf::owns(v)) LOGE("  stack[%d] %s", i, elf::describe(v).c_str());
-    }
+    log_guest_stack(R[13], 32);
     fatal("%s", why);
 }
 

@@ -38,6 +38,9 @@ public class Dump extends GhidraScript {
                 Function f = getFunctionContaining(ad);
                 if (f == null) { out.println("// no function at " + a[i]); continue; }
                 dec(f);
+            } else if (cmd.equals("fn")) {
+                Function f = getFunctionContaining(toAddr(a[i]));
+                out.println(a[i] + " -> " + (f == null ? "?" : f.getName() + " @ " + f.getEntryPoint() + " size " + f.getBody().getNumAddresses()));
             } else if (cmd.equals("refs")) {
                 out.println("== refs to " + a[i]); refs(toAddr(a[i]));
             } else if (cmd.equals("str")) {

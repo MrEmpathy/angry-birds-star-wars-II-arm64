@@ -10,7 +10,12 @@ PKG="com.rovio.angrybirdsstarwarsii.ads"
 mkdir -p "$ROOT/test-out"
 
 bash "$ROOT/bridge/tools/make_release.sh" "$ABI" "$APK" | tail -2
-adb install -r "$(cygpath -w "$APK")" | tail -1
+# --no-incremental: on 2026-10-17 a streamed (incremental) install on a phone lost its USB connection and
+# Android removed the installed app together with its saved progress. A full install copies the whole
+# APK before touching the installed app, so a dropped connection only makes the install fail.
+# --user 0: without it, pm installs for every user, including Samsung's Dual Messenger profile (user 95),
+# which adds a second launcher icon.
+adb install -r --no-incremental --user 0 "$(cygpath -w "$APK")" | tail -1
 adb shell am force-stop "$PKG"
 adb logcat -c
 adb shell am start -n "$PKG/com.rovio.fusion.App" > /dev/null

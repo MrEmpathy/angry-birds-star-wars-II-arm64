@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "elf32.h"
+#include "perf.h"
 
 void fatal(const char* fmt, ...) {
     char buf[1024];
@@ -86,6 +87,12 @@ void dispatch(uint32_t idx, cpu::Ctx& c) {
 #if ABSW_TRACE
     LOGI("call %s from %s", thunk_name(arena::kThunkBase + idx * 8).c_str(), elf::describe(c.r(14)).c_str());
 #endif
+    if (perf::enabled()) {
+        uint64_t t0 = perf::now_ns();
+        fn(c);
+        perf::hle_call(idx, perf::now_ns() - t0);
+        return;
+    }
     fn(c);
 }
 

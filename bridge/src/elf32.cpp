@@ -15,6 +15,7 @@ namespace elf {
 namespace {
 
 constexpr uint32_t kPtArmExidx = 0x70000001;
+constexpr uint32_t kPtGnuRelro = 0x6474e552;
 constexpr uint32_t R_ARM_NONE_ = 0, R_ARM_ABS32_ = 2, R_ARM_REL32_ = 3, R_ARM_GLOB_DAT_ = 21,
                    R_ARM_JUMP_SLOT_ = 22, R_ARM_RELATIVE_ = 23;
 
@@ -65,6 +66,9 @@ Module* load(const std::string& name, const uint8_t* data, size_t size) {
             memcpy(arena::h(p.p_vaddr + m->bias), data + p.p_offset, p.p_filesz);
             if (p.p_memsz > p.p_filesz)
                 memset(arena::h(p.p_vaddr + m->bias + p.p_filesz), 0, p.p_memsz - p.p_filesz);
+            if (!(p.p_flags & PF_W)) m->read_only.emplace_back(p.p_vaddr + m->bias, p.p_vaddr + m->bias + p.p_memsz);
+        } else if (p.p_type == kPtGnuRelro) {
+            m->read_only.emplace_back(p.p_vaddr + m->bias, p.p_vaddr + m->bias + p.p_memsz);
         } else if (p.p_type == PT_DYNAMIC) {
             dyn = p.p_vaddr + m->bias;
         } else if (p.p_type == kPtArmExidx) {
@@ -175,6 +179,14 @@ const Module* owner(uint32_t addr) {
 }
 
 bool owns(uint32_t addr) { return owner(addr) != nullptr; }
+
+bool is_read_only(uint32_t addr) {
+    const Module* m = owner(addr);
+    if (!m) return false;
+    for (const auto& [lo, hi] : m->read_only)
+        if (addr >= lo && addr < hi) return true;
+    return false;
+}
 
 std::string describe(uint32_t addr) {
     char buf[256];

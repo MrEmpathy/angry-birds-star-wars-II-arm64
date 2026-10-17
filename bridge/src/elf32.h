@@ -19,6 +19,9 @@ struct Module {
     std::vector<uint32_t> init_array;
     std::unordered_map<std::string, uint32_t> exports;  // defined dynamic symbols (Thumb bit kept)
     std::vector<std::pair<uint32_t, std::string>> funcs;  // sorted, for diagnostics
+    // Guest ranges [first, second) that never change after relocation: PT_LOAD segments without PF_W,
+    // and PT_GNU_RELRO (the GOT and other data the dynamic linker makes read-only).
+    std::vector<std::pair<uint32_t, uint32_t>> read_only;
 };
 
 // Maps and relocates the image; imports resolve against earlier modules, then the HLE registry.
@@ -28,6 +31,7 @@ void run_init(Module* m);
 uint32_t find_export(const std::string& name);  // across loaded modules, load order
 const Module* owner(uint32_t addr);
 bool owns(uint32_t addr);
+bool is_read_only(uint32_t addr);  // inside a module's read_only ranges (JIT constant folding)
 std::string describe(uint32_t addr);
 uint32_t find_exidx(uint32_t pc, int32_t* count);
 

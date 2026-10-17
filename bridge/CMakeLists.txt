@@ -23,6 +23,7 @@ add_library(AngryBirdsStarWarsII SHARED
     src/display.cpp
     src/elf32.cpp
     src/gheap.c
+    src/hint.cpp
     src/hle.cpp
     src/hle_android.cpp
     src/hle_gles.cpp
@@ -30,7 +31,9 @@ add_library(AngryBirdsStarWarsII SHARED
     src/hle_pthread.cpp
     src/hle_stdio.cpp
     src/jni_bridge.cpp
+    src/perf.cpp
     src/seed.cpp
+    src/webp.cpp
 )
 target_include_directories(AngryBirdsStarWarsII PRIVATE src ${ABSW_GEN_DIR})
 target_compile_definitions(AngryBirdsStarWarsII PRIVATE ABSW_TRACE=$<BOOL:${ABSW_TRACE}>)

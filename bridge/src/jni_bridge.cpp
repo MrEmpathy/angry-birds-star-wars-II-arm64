@@ -9,6 +9,8 @@
 #include <vector>
 
 #include "display.h"
+#include "hint.h"
+#include "perf.h"
 #include "elf32.h"
 #include "hle.h"
 
@@ -572,6 +574,13 @@ void push_arg(cpu::Args& a, T v) {
 // Slots that get host-side adaptation (see display.h); resolved once in init().
 std::atomic<int> g_slot_config{-1};  // NativeApplication.nativeConfig (UI thread, before the GL surface exists)
 std::atomic<int> g_slot_input{-1};   // MyInputHandler.nativeInput(id, x, y, action)
+std::atomic<int> g_slot_init{-1};    // NativeApplication.nativeInit(w, h): game start-up on the GL thread
+std::atomic<int> g_slot_update{-1};  // NativeApplication.nativeUpdate / nativeRender: one frame each
+std::atomic<int> g_slot_render{-1};
+std::atomic<int> g_slot_pause{-1};   // NativeApplication.nativePause / nativeResume
+std::atomic<int> g_slot_resume{-1};
+std::atomic<bool> g_frame_pending{true};  // log the next frame (start-up, then after each resume)
+uint64_t g_resume_ns = 0;
 
 template <int Slot, typename R, typename... A>
 R native_tramp(JNIEnv* env, jobject self, A... a) {
@@ -589,7 +598,42 @@ R native_tramp(JNIEnv* env, jobject self, A... a) {
     }
     uint32_t fn = g_native_addr[Slot].load(std::memory_order_acquire);
     if (!fn) fatal("native %s.%s is not bound", kNatives[Slot].cls, kNatives[Slot].name);
+    const bool frame = Slot == g_slot_update.load(std::memory_order_relaxed) ||
+                       Slot == g_slot_render.load(std::memory_order_relaxed);
+    if (frame) display::pace_frame();
+    const bool profile = frame && perf::enabled();
+    uint64_t w0 = 0, c0 = 0, h0 = 0;
+    if (frame) c0 = perf::thread_cpu_ns();
+    if (profile) {
+        w0 = perf::now_ns();
+        h0 = perf::thread_hle_ns();
+    }
+    if (Slot == g_slot_init.load(std::memory_order_relaxed)) perf::sample_this_thread();
     uint64_t r = cpu::call(fn, args.words);
+    if (frame) {
+        const uint64_t cpu_ns = perf::thread_cpu_ns() - c0;
+        hint::frame_done(cpu_ns);
+        if (profile) {
+            perf::native_call(Slot == g_slot_render.load(std::memory_order_relaxed) ? perf::Native::kRender
+                                                                                    : perf::Native::kUpdate,
+                              perf::now_ns() - w0, cpu_ns, perf::thread_hle_ns() - h0);
+        }
+    }
+    if (Slot == g_slot_init.load(std::memory_order_relaxed)) {
+        perf::mark("nativeInit done");
+        perf::report_samples_now("nativeInit");
+    }
+    if (Slot == g_slot_pause.load(std::memory_order_relaxed)) LOGI("lifecycle: nativePause");
+    if (Slot == g_slot_resume.load(std::memory_order_relaxed)) {
+        g_resume_ns = perf::now_ns();
+        g_frame_pending.store(true);
+        LOGI("lifecycle: nativeResume");
+    }
+    if (frame && g_frame_pending.exchange(false)) {
+        if (g_resume_ns) LOGI("lifecycle: first frame %.0f ms after nativeResume", (perf::now_ns() - g_resume_ns) / 1e6);
+        else perf::mark("first frame");
+        perf::report_samples_now("first frame");
+    }
     if constexpr (std::is_void_v<R>) {
         return;
     } else if constexpr (std::is_pointer_v<R>) {
@@ -823,6 +867,11 @@ void init(JavaVM* vm, JNIEnv* e) {
     if (kNumNatives > g_native_addr.size()) fatal("too many native slots");
     g_slot_config.store(find_native("com/rovio/fusion/NativeApplication", "nativeConfig", "(Ljava/lang/String;)V"));
     g_slot_input.store(find_native("com/rovio/fusion/MyInputHandler", "nativeInput", "(IFFI)V"));
+    g_slot_init.store(find_native("com/rovio/fusion/NativeApplication", "nativeInit", "(II)V"));
+    g_slot_update.store(find_native("com/rovio/fusion/NativeApplication", "nativeUpdate", "()Z"));
+    g_slot_render.store(find_native("com/rovio/fusion/NativeApplication", "nativeRender", "()Z"));
+    g_slot_pause.store(find_native("com/rovio/fusion/NativeApplication", "nativePause", "()V"));
+    g_slot_resume.store(find_native("com/rovio/fusion/NativeApplication", "nativeResume", "()V"));
     LOGI("JNI bridge ready: env=0x%x vm=0x%x, %zu native trampolines", g_genv, g_gvm, kNumNatives);
 }
 

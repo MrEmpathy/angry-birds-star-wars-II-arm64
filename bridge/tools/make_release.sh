@@ -4,6 +4,8 @@
 #   abi: arm64-v8a (default, phones) or x86_64 (emulator)
 #   RENDER_HEIGHT=N caps the GL surface height (bridge/src/display.cpp). The default 0 renders at native
 #   resolution: ABSW2 lays its UI out for the screen size, so a cap only lowers sharpness.
+#   MAX_FPS=N caps the frame rate. The default 120 matches 120 Hz screens; 60 halves the emulated work
+#   (and heat); 0 follows the display. adb shell setprop debug.absw.max_fps N overrides it per device.
 # Inputs: original/absw2_ads_1.9.25.apk (com.rovio.angrybirdsstarwarsii.ads 1.9.25, unmodified)
 #         original/absw2_ads_files.zip  (files/ of a device that had downloaded the cloud assets)
 set -euo pipefail
@@ -22,7 +24,8 @@ OUT="${2:-$DEF_OUT}"
 mkdir -p "$ROOT/test-out" "$(dirname "$OUT")"
 
 wsl.exe -e bash -lc "cd /tmp && ABIS=$ABI TRACE=${TRACE:-OFF} bash $W/bridge/tools/build.sh" > "$ROOT/test-out/build.log" 2>&1 \
-  || { grep -E "error|undefined|failed" "$ROOT/test-out/build.log" | head -20; exit 1; }
+  || { echo "bridge build failed (WSL out of memory? close the emulator and retry); see test-out/build.log" >&2
+       grep -aE "error|undefined|failed" "$ROOT/test-out/build.log" | head -20; exit 1; }
 grep -E "^$ABI:" "$ROOT/test-out/build.log"
 
 OV="$ROOT/bridge/out/overlay"
@@ -34,5 +37,5 @@ python -I "$ROOT/bridge/tools/package_apk.py" "$(cygpath -w "$BASE")" "$(cygpath
   --bridge-out "$(cygpath -w "$ROOT/bridge/out")" --abi "$ABI" \
   --overlay "$(cygpath -w "$OV/lua")" --overlay "$(cygpath -w "$OV/cloud")" \
   --build-tools "$(cygpath -w "$SDK/build-tools/36.0.0")" --keystore "$(cygpath -w "$ROOT/keystore/absw2-local.keystore")" \
-  --render-height "${RENDER_HEIGHT:-0}"
+  --render-height "${RENDER_HEIGHT:-0}" --max-fps "${MAX_FPS:-120}"
 sha256sum "$OUT"

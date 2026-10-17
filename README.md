@@ -319,8 +319,17 @@ screen, main menu, Naboo 1-1 at native resolution and 120 frames per second (min
 
 The self-join crash happened in 2 of about 10 launches of measurement sessions right after an install, and in
 none of about 30 other launches; its trigger is unknown. It predates the JIT changes: a phone crash with the
-same signature on 2026-10-16 (after 26 minutes of play) and the emulator crash below. The parking fix has not
-yet met a real occurrence.
+same signature on 2026-10-16 (after 26 minutes of play) and the emulator crash below. The SDK object that
+joins itself owns its own worker thread; in the two occurrences with a full log, the join came about a
+second after that thread started.
+
+The first real occurrence with the parking fix (2026-10-17, release v1.0.0, twice in a row, 27 and 37 s
+after launch) crashed in the self-join log itself. `log_guest_stack` read 160 words above the guest stack
+pointer, but that thread was only 0x1d0 bytes below the top of its stack, and the gap above the stack is not
+mapped (SIGSEGV on guest address 0x11290000). The scan now stops at the top of the calling thread's guest
+stack, also in the fault logger. The logged stack confirmed the chain described under Debugging (the
+reactor loop at `+0x3a4fc8`, the SDK object's destructor at `+0x22ab0c`, the `Thread` destructor that joins
+at `+0x493498`). Parking itself has not been seen in a log yet.
 
 Earlier checks (2026-10-16):
 

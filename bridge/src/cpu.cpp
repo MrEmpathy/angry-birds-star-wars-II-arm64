@@ -8,6 +8,7 @@
 #include <signal.h>
 #include <unistd.h>
 
+#include <algorithm>
 #include <array>
 #include <atomic>
 #include <bitset>
@@ -251,16 +252,23 @@ static uintptr_t host_pc(void* ctx) {
 #endif
 }
 
+// Reads only between sp and the top of the calling thread's guest stack: the gap above each stack is not
+// mapped, and a thread near the top of its stack (a self-join right after the thread's entry) has fewer
+// words there than asked for.
+void log_guest_stack(uint32_t sp, int words) {
+    const uint32_t top = t_state ? t_state->stack_top : 0;
+    if (!top || sp >= top || sp < top - kStackSize) return;
+    const uint32_t n = std::min(static_cast<uint32_t>(words), (top - sp) / 4);
+    for (uint32_t i = 0; i < n; ++i) {
+        uint32_t v;
+        memcpy(&v, arena::base + sp + 4 * i, 4);
+        if (elf::owns(v)) LOGE("  stack[%u] %s", i, elf::describe(v).c_str());
+    }
+}
+
 // A fault inside this library (not in JIT code) is a guest access that the memory callbacks could not
 // serve, i.e. a real guest crash: log the guest thread's registers before the process dies. The JIT
 // writes the guest PC back at block boundaries, so pc is the start of the faulting block.
-void log_guest_stack(uint32_t sp, int words) {
-    for (int i = 0; i < words; ++i) {
-        uint32_t v;
-        memcpy(&v, arena::base + sp + 4 * i, 4);
-        if (elf::owns(v)) LOGE("  stack[%d] %s", i, elf::describe(v).c_str());
-    }
-}
 
 static void dump_guest_context(void* ctx) {
     Dl_info self{}, at{};

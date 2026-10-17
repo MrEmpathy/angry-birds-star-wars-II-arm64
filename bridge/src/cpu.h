@@ -57,7 +57,7 @@ uint32_t run_thread_entry(uint32_t fn, uint32_t arg);
 [[noreturn]] void dump_and_die(Dynarmic::A32::Jit* jit, const char* why);
 
 // Diagnostics: logs the words among the `words` above guest sp that point into a loaded module (return
-// addresses, mostly).
+// addresses, mostly), stopping at the top of the calling thread's guest stack.
 void log_guest_stack(uint32_t sp, int words);
 
 }  // namespace cpu

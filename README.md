@@ -1,10 +1,10 @@
 # angry-birds-star-wars-II-arm64
 
-Personal tooling to run **Angry Birds Star Wars II 1.9.25** (your own copy) on 64-bit-only Android phones,
+Tooling to run **Angry Birds Star Wars II 1.9.25** on 64-bit-only Android phones,
 such as the Galaxy S26 Ultra, whose CPUs cannot run the game's 32-bit ARM engine. The game works offline
 with the files it used to download from Rovio's servers, which are now shut down.
 
-Nothing here contains Rovio code, assets or keys. The build reads them from your own files on your machine.
+
 Do not distribute the generated APK or anything under `original/`, `work/` or `keystore/`.
 
 ## Inputs (`original/`, never committed)

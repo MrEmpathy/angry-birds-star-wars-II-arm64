@@ -1,0 +1,9 @@
+* text=auto eol=lf
+
+# Inputs, keys, build outputs and analysis files are stored byte for byte.
+/original/** -text
+/keystore/** -text
+/dist/** -text
+/bridge/out/** -text
+/bridge/gen/** -text
+/work/** -text

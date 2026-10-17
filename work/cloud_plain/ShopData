@@ -1,0 +1,728 @@
+data = {
+	jengaCodeRewardT1 = {value = 100}, -- jenga codes reward tier 1
+	jengaCodeRewardT2 = {value = 300},  -- jenga codes reward tier 2
+	
+	starToCredits = 20,
+	singleLevelOppositeCharacterPrice = 10,
+	allLevelsOppositeCharacterPrice = 299,
+	
+	specialsVersion = 2.03,
+	
+	specialOffers = {
+		{
+			id = "BirdSkillpack_spec",
+			description = { 
+				en_EN = "Bird Side Skillshot Bundle",
+				de_DE = "Skillshot-Paket der Vogel-Seite",
+				es_ES = "Paq. de habilidades de la R. Aviar",
+				fr_FR = "Bundle compétences Côté oiseaux",
+				it_IT = "Tiro di precisione L. Pennuto",
+				ja_JP = "バードサイド スキルショットバンドル",
+				ru_RU = "Пакет «Мастер» Птичьей Стороны",
+				pt_BR = "Pacote Skillshot dos pássaros",
+			},
+			backgroundIndex = "7",
+			reduction = "-65%",
+			buyButtons = {
+				{price = 999,  bundle = {{character = "Yoda", amount = 1, type = "unlimited"}, {character = "JarJar", amount = 50},}},
+			}
+		},
+		{
+			id = "PorkSkillpack_spec",
+			description = { 
+				en_EN = "Pork Side Skillshot Bundle",
+				de_DE = "Skillshot-Paket der Schweine-Seite",
+				es_ES = "Paq. de habilidades del L. Gorrino",
+				fr_FR = "Bundle compétences Côté cochons",
+				it_IT = "Tiro di precisione L. Porcino",
+				ja_JP = "ポークサイド スキルショットバンドル",
+				ru_RU = "Пакет «Мастер» Свинской Стороны",
+				pt_BR = "Pacote Skillshot dos porcos",
+			},
+			backgroundIndex = "7",
+			reduction = "-70%",
+			buyButtons = {
+				{price = 999,  bundle = {{character = "Droideka", amount = 1, type = "unlimited"}, {character = "ZamWesell", amount = 50},}},
+			}
+		},
+	},
+
+	singlesCarousel = {
+		{
+			id = "Ezra_sing1",
+			description = "Ezra",
+			sprite = "BTN_EZRA",
+			buyButtons = {
+				{price = 500,  bundle = {{character = "Ezra", amount = 10}}},
+				{price = 1500, bundle = {{character = "Ezra", amount = 30}}},
+				{price = 2000, bundle = {{character = "Ezra", amount = 100}}},
+				{price = 2500, bundle = {{character = "Ezra", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{
+			id = "Sabine_sing1",
+			description = "Sabine",
+			sprite = "BTN_SABINE",
+			buyButtons = {
+				{price = 300,  bundle = {{character = "Sabine", amount = 10}}},
+				{price = 550, bundle = {{character = "Sabine", amount = 30}}},
+				{price = 1200, bundle = {{character = "Sabine", amount = 100}}},
+				{price = 2000, bundle = {{character = "Sabine", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{
+			id = "Chopper_sing1",
+			description = "Chopper",
+			sprite = "BTN_CHOPPER",
+			buyButtons = {
+				{price = 500,  bundle = {{character = "Chopper", amount = 10}}},
+				{price = 800, bundle = {{character = "Chopper", amount = 30}}},
+				{price = 1500, bundle = {{character = "Chopper", amount = 100}}},
+				{price = 2500, bundle = {{character = "Chopper", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{
+			id = "Hera_sing1",
+			description = "Hera",
+			sprite = "BTN_HERA",
+			buyButtons = {
+				{price = 300,  bundle = {{character = "Hera", amount = 10}}},
+				{price = 550, bundle = {{character = "Hera", amount = 30}}},
+				{price = 1200, bundle = {{character = "Hera", amount = 100}}},
+				{price = 2000, bundle = {{character = "Hera", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{
+			id = "Kanan_sing1",
+			description = "Kanan",
+			sprite = "BTN_KANAN",
+			buyButtons = {
+				{price = 1000,  bundle = {{character = "Kanan", amount = 10}}},
+				{price = 1750, bundle = {{character = "Kanan", amount = 30}}},
+				{price = 2250, bundle = {{character = "Kanan", amount = 100}}},
+				{price = 3750, bundle = {{character = "Kanan", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{
+			id = "Zeb_sing1",
+			description = "Zeb",
+			sprite = "BTN_ZEB",
+			buyButtons = {
+				{price = 500,  bundle = {{character = "Zeb", amount = 10}}},
+				{price = 1000, bundle = {{character = "Zeb", amount = 30}}},
+				{price = 1500, bundle = {{character = "Zeb", amount = 100}}},
+				{price = 2250, bundle = {{character = "Zeb", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{
+			id = "QuiGonJinn_sing1",
+			description = "Qui-Gon Jinn",
+			sprite = "BTN_QUI_GON",
+			buyButtons = {
+				{price = 500,  bundle = {{character = "QuiGon", amount =  10}}},
+				{price = 1000, bundle = {{character = "QuiGon", amount = 30}}},
+				{price = 1500, bundle = {{character = "QuiGon", amount = 100}}},
+				{price = 2250, bundle = {{character = "QuiGon", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "ObiWanKenobi_sing1",
+			description = "ObiWan",
+			sprite = "BTN_OBI_WAN",
+			buyButtons = {
+				{price = 300,  bundle = {{character = "ObiWan", amount = 10}}},
+				{price = 550,  bundle = {{character = "ObiWan", amount = 30}}},
+				{price = 1200, bundle = {{character = "ObiWan", amount = 100}}},
+				{price = 2000, bundle = {{character = "ObiWan", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "Yoda_sing1",
+			description = "Yoda",
+			sprite = "BTN_YODA",
+			buyButtons = {
+				{price = 800,  bundle = {{character = "Yoda", amount = 10}}},
+				{price = 1350, bundle = {{character = "Yoda", amount = 30}}},
+				{price = 1900, bundle = {{character = "Yoda", amount = 100}}},
+				{price = 3000, bundle = {{character = "Yoda", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "JarJarBinks_sing1",
+			description = "JarJar",
+			sprite = "BTN_JAR_JAR",
+			buyButtons = {
+				{price = 90,  bundle = {{character = "JarJar", amount =  10}}},
+				{price = 130,  bundle = {{character = "JarJar", amount = 30}}},
+				{price = 250, bundle = {{character = "JarJar", amount = 100}}},
+				{price = 1000, bundle = {{character = "JarJar", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "AnakinEpisodeI_sing1",
+			description = "AnakinEp1",
+			sprite = "BTN_ANAKIN_EP_I",
+			buyButtons = {
+				{price = 300,  bundle = {{character = "AnakinEp1", amount = 10}}},
+				{price = 400,  bundle = {{character = "AnakinEp1", amount = 30}}},
+				{price = 600,  bundle = {{character = "AnakinEp1", amount = 100}}},
+				{price = 1200, bundle = {{character = "AnakinEp1", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "CaptainPanaka_sing1",
+			description = "Panaka",
+			sprite = "BTN_PANAKA",
+			buyButtons = {
+				{price = 300,  bundle = {{character = "Panaka", amount = 10}}},
+				{price = 600,  bundle = {{character = "Panaka", amount = 30}}},
+				{price = 1000, bundle = {{character = "Panaka", amount = 100}}},
+				{price = 1600, bundle = {{character = "Panaka", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "Padme_sing1",
+			description = "Padme",
+			sprite = "BTN_PADME",
+			buyButtons = {
+				{price = 500,  bundle = {{character = "Padme", amount =  10}}},
+				{price = 1000,  bundle = {{character = "Padme", amount = 30}}},
+				{price = 1500, bundle = {{character = "Padme", amount = 100}}},
+				{price = 2250, bundle = {{character = "Padme", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "AnakinEpisodeII_sing1",
+			description = "AnakinEp2",
+			sprite = "BTN_ANAKIN_EP_II",
+			buyButtons = {
+				{price = 500,  bundle = {{character = "AnakinEp2", amount = 10}}},
+				{price = 1000, bundle = {{character = "AnakinEp2", amount = 30}}},
+				{price = 1500, bundle = {{character = "AnakinEp2", amount = 100}}},
+				{price = 2250, bundle = {{character = "AnakinEp2", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "JediYoungling_sing1",
+			description = "Padawans",
+			sprite = "BTN_PADAWANS",
+			buyButtons = {
+				{price = 80,  bundle = {{character = "Padawans", amount =  10}}},
+				{price = 120,  bundle = {{character = "Padawans", amount = 30}}},
+				{price = 350, bundle = {{character = "Padawans", amount = 100}}},
+				{price = 1000, bundle = {{character = "Padawans", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "MaceWindu_sing1",
+			description = "MaceWindu",
+			sprite = "BTN_MACE_WINDU",
+			buyButtons = {
+				{price = 500,  bundle = {{character = "MaceWindu", amount =  10}}},
+				{price = 1000,  bundle = {{character = "MaceWindu", amount = 30}}},
+				{price = 1500, bundle = {{character = "MaceWindu", amount = 100}}},
+				{price = 2250, bundle = {{character = "MaceWindu", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "Chewbacca_sing1",
+			description = "Chewbacca",
+			sprite = "BTN_CHEWBACCA",
+			buyButtons = {
+				{price = 300,  bundle = {{character = "Chewbacca", amount = 10}}},
+				{price = 550,  bundle = {{character = "Chewbacca", amount = 30}}},
+				{price = 1200, bundle = {{character = "Chewbacca", amount = 100}}},
+				{price = 2000, bundle = {{character = "Chewbacca", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "R2D2_sing1",
+			description = "R2D2",
+			sprite = "BTN_R2D2",
+			buyButtons = {
+				{price = 500,  bundle = {{character = "R2D2", amount =  10}}},
+				{price = 1000,  bundle = {{character = "R2D2", amount = 30}}},
+				{price = 1500, bundle = {{character = "R2D2", amount = 100}}},
+				{price = 2250, bundle = {{character = "R2D2", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "C3PO_sing1",
+			description = "C3PO",
+			sprite = "BTN_C3PO",
+			buyButtons = {
+				{price = 300,  bundle = {{character = "C3PO", amount = 10}}},
+				{price = 550,  bundle = {{character = "C3PO", amount = 30}}},
+				{price = 1200, bundle = {{character = "C3PO", amount = 100}}},
+				{price = 2000, bundle = {{character = "C3PO", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "SilverC3PO_sing1",
+			description = "SilverC3PO",
+			sprite = "BTN_C3PO_SILVER",
+			buyButtons = {
+				{price = 300,  bundle = {{character = "SilverC3PO", amount = 10}}},
+				{price = 550,  bundle = {{character = "SilverC3PO", amount = 30}}},
+				{price = 1200, bundle = {{character = "SilverC3PO", amount = 100}}},
+				{price = 2000, bundle = {{character = "SilverC3PO", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{
+			id = "HanSolo_sing1",
+			description = "HanSolo",
+			sprite = "BTN_HAN_SOLO",
+			buyButtons = {
+				{price = 500,  bundle = {{character = "HanSolo", amount =  10}}},
+				{price = 1000,  bundle = {{character = "HanSolo", amount = 30}}},
+				{price = 1500, bundle = {{character = "HanSolo", amount = 100}}},
+				{price = 2250, bundle = {{character = "HanSolo", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "Leia_sing1",
+			description = "Leia",
+			sprite = "BTN_LEIA",
+			buyButtons = {
+				{price = 500,  bundle = {{character = "Leia", amount =  10}}},
+				{price = 1000,  bundle = {{character = "Leia", amount = 30}}},
+				{price = 1500, bundle = {{character = "Leia", amount = 100}}},
+				{price = 2250, bundle = {{character = "Leia", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "PilotLuke_sing1",
+			description = "LukePilot",
+			sprite = "BTN_LUKE_PILOT",
+			buyButtons = {
+				{price = 400,  bundle = {{character = "LukePilot", amount = 10}}},
+				{price = 800,  bundle = {{character = "LukePilot", amount = 30}}},
+				{price = 1500, bundle = {{character = "LukePilot", amount = 100}}},
+				{price = 2200, bundle = {{character = "LukePilot", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "EndorLuke_sing1",
+			description = "LukeEndor",
+			sprite = "BTN_LUKE_ENDOR",
+			buyButtons = {
+				{price = 400,  bundle = {{character = "LukeEndor", amount = 10}}},
+				{price = 800,  bundle = {{character = "LukeEndor", amount = 30}}},
+				{price = 1500, bundle = {{character = "LukeEndor", amount = 100}}},
+				{price = 2200, bundle = {{character = "LukeEndor", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "JediLuke_sing1",
+			description = "LukeJedi",
+			sprite = "BTN_LUKE_JEDI",
+			buyButtons = {
+				{price = 500,  bundle = {{character = "LukeJedi", amount =  10}}},
+				{price = 1000,  bundle = {{character = "LukeJedi", amount = 30}}},
+				{price = 1500, bundle = {{character = "LukeJedi", amount = 100}}},
+				{price = 2250, bundle = {{character = "LukeJedi", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "Lando_sing1",
+			description = "Lando",
+			sprite = "BTN_LANDO",
+			buyButtons = {
+				{price = 300,  bundle = {{character = "Lando", amount = 10}}},
+				{price = 550,  bundle = {{character = "Lando", amount = 30}}},
+				{price = 1200, bundle = {{character = "Lando", amount = 100}}},
+				{price = 2000, bundle = {{character = "Lando", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{
+			id = "Wicket_sing1",
+			description = "Wicket",
+			sprite = "BTN_WICKET",
+			buyButtons = {
+				{price = 200,  bundle = {{character = "Wicket", amount = 10}}},
+				{price = 400,  bundle = {{character = "Wicket", amount = 30}}},
+				{price = 800, bundle = {{character = "Wicket", amount = 100}}},
+				{price = 1500, bundle = {{character = "Wicket", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{
+			id = "KitFisto_sing1",
+			description = "KitFisto",
+			sprite = "BTN_KIT",
+			buyButtons = {
+				{price = 300,  bundle = {{character = "KitFisto", amount = 10}}},
+				{price = 550,  bundle = {{character = "KitFisto", amount = 30}}},
+				{price = 1200, bundle = {{character = "KitFisto", amount = 100}}},
+				{price = 2000, bundle = {{character = "KitFisto", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{
+			id = "HanSoloCarbonite_sing1",
+			description = "HanSoloCarbonite",
+			sprite = "BTN_CARBONITE_SOLO",
+			buyButtons = {
+				{price = 300,  bundle = {{character = "HanSoloCarbonite", amount = 10}}},
+				{price = 550,  bundle = {{character = "HanSoloCarbonite", amount = 30}}},
+				{price = 1200, bundle = {{character = "HanSoloCarbonite", amount = 100}}},
+				{price = 2000, bundle = {{character = "HanSoloCarbonite", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{
+			id = "Inquisitor_sing1",
+			description = "Inquisitor",
+			sprite = "BTN_INQUISITOR",
+			buyButtons = {
+				{price = 800,  bundle = {{character = "Inquisitor", amount = 10}}},
+				{price = 1500, bundle = {{character = "Inquisitor", amount = 30}}},
+				{price = 2000, bundle = {{character = "Inquisitor", amount = 100}}},
+				{price = 3000, bundle = {{character = "Inquisitor", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{
+			id = "Kallus_sing1",
+			description = "Kallus",
+			sprite = "BTN_KALLUS",
+			buyButtons = {
+				{price = 200,  bundle = {{character = "Kallus", amount = 10}}},
+				{price = 400, bundle = {{character = "Kallus", amount = 30}}},
+				{price = 800, bundle = {{character = "Kallus", amount = 100}}},
+				{price = 1500, bundle = {{character = "Kallus", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{
+			id = "ATDPPilot_sing1",
+			description = "ATDPPilot",
+			sprite = "BTN_ATDP_PILOT",
+			buyButtons = {
+				{price = 500,  bundle = {{character = "ATDPPilot", amount = 10}}},
+				{price = 1500, bundle = {{character = "ATDPPilot", amount = 30}}},
+				{price = 2000, bundle = {{character = "ATDPPilot", amount = 100}}},
+				{price = 2500, bundle = {{character = "ATDPPilot", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{
+			id = "ChikatroVizago_sing1",
+			description = "ChikatroVizago",
+			sprite = "BTN_VIZAGO",
+			buyButtons = {
+				{price = 300,  bundle = {{character = "ChikatroVizago", amount = 10}}},
+				{price = 550, bundle = {{character = "ChikatroVizago", amount = 30}}},
+				{price = 1200, bundle = {{character = "ChikatroVizago", amount = 100}}},
+				{price = 2000, bundle = {{character = "ChikatroVizago", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{
+			id = "VizagoBodyguard_sing1",
+			description = "VizagoBodyguard",
+			sprite = "BTN_VIZAGO_BODYGUARD",
+			buyButtons = {
+				{price = 300,  bundle = {{character = "VizagoBodyguard", amount = 10}}},
+				{price = 600, bundle = {{character = "VizagoBodyguard", amount = 30}}},
+				{price = 1000, bundle = {{character = "VizagoBodyguard", amount = 100}}},
+				{price = 1500, bundle = {{character = "VizagoBodyguard", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{
+			id = "ImperialOfficer_sing1",
+			description = "ImperialOfficer",
+			sprite = "BTN_IMPERIAL_OFFICER",
+			buyButtons = {
+				{price = 500,  bundle = {{character = "ImperialOfficer", amount = 10}}},
+				{price = 1500, bundle = {{character = "ImperialOfficer", amount = 30}}},
+				{price = 2000, bundle = {{character = "ImperialOfficer", amount = 100}}},
+				{price = 2500, bundle = {{character = "ImperialOfficer", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{
+			id = "JangoFett_sing1",
+			description = "JangoFett",
+			sprite = "BTN_JANGO_FETT",
+			buyButtons = {
+				{price = 300,  bundle = {{character = "JangoFett", amount = 10}}},
+				{price = 550,  bundle = {{character = "JangoFett", amount = 30}}},
+				{price = 1200, bundle = {{character = "JangoFett", amount = 100}}},
+				{price = 2000, bundle = {{character = "JangoFett", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "DarthSidious_sing1",
+			description = "DarthSidious",
+			sprite = "BTN_PALPATINE",
+			buyButtons = {
+				{price = 600,  bundle = {{character = "DarthSidious", amount = 10}}},
+				{price = 1300, bundle = {{character = "DarthSidious", amount = 30}}},
+				{price = 2000, bundle = {{character = "DarthSidious", amount = 100}}},
+				{price = 3000, bundle = {{character = "DarthSidious", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "BattleDroid_sing1",
+			description = "BattleDroid",
+			sprite = "BTN_BATTLE_DROID",
+			buyButtons = {
+				{price = 100,  bundle = {{character = "BattleDroid", amount = 10}}},
+				{price = 200,  bundle = {{character = "BattleDroid", amount = 30}}},
+				{price = 500,  bundle = {{character = "BattleDroid", amount = 100}}},
+				{price = 1000, bundle = {{character = "BattleDroid", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "DarthMaul_sing1",
+			description = "DarthMaul",
+			sprite = "BTN_DARTH_MAUL",
+			buyButtons = {
+				{price = 500,  bundle = {{character = "DarthMaul", amount = 10}}},
+				{price = 1000, bundle = {{character = "DarthMaul", amount = 30}}},
+				{price = 1500, bundle = {{character = "DarthMaul", amount = 100}}},
+				{price = 2250, bundle = {{character = "DarthMaul", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "CountDooku_sing1",
+			description = "CountDooku",
+			sprite = "BTN_DOOKU",
+			buyButtons = {
+				{price = 500,  bundle = {{character = "CountDooku", amount = 10}}},
+				{price = 1000, bundle = {{character = "CountDooku", amount = 30}}},
+				{price = 1500, bundle = {{character = "CountDooku", amount = 100}}},
+				{price = 2250, bundle = {{character = "CountDooku", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "Droideka_sing1",
+			description = "Droideka",
+			sprite = "BTN_DROIDEKA",
+			buyButtons = {
+				{price = 300,  bundle = {{character = "Droideka", amount = 10}}},
+				{price = 700,  bundle = {{character = "Droideka", amount = 30}}},
+				{price = 1200, bundle = {{character = "Droideka", amount = 100}}},
+				{price = 2000, bundle = {{character = "Droideka", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "ZamWesell_sing1",
+			description = "ZamWesell",
+			sprite = "BTN_WESSELL",
+			buyButtons = {
+				{price = 300,  bundle = {{character = "ZamWesell", amount = 10}}},
+				{price = 550,  bundle = {{character = "ZamWesell", amount = 30}}},
+				{price = 1200, bundle = {{character = "ZamWesell", amount = 100}}},
+				{price = 2000, bundle = {{character = "ZamWesell", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "GeneralGrievous_sing1",
+			description = "DarthGrievous",
+			sprite = "BTN_DARTH_GRIEVOUS",
+			buyButtons = {
+				{price = 500,  bundle = {{character = "DarthGrievous", amount = 10}}},
+				{price = 1000, bundle = {{character = "DarthGrievous", amount = 30}}},
+				{price = 1500, bundle = {{character = "DarthGrievous", amount = 100}}},
+				{price = 2250, bundle = {{character = "DarthGrievous", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "AnakinEpisodeIII_sing1",
+			description = "AnakinEp3",
+			sprite = "BTN_ANAKIN_EP_III",
+			buyButtons = {
+				{price = 750,  bundle = {{character = "AnakinEp3", amount = 10}}},
+				{price = 1500, bundle = {{character = "AnakinEp3", amount = 30}}},
+				{price = 2000, bundle = {{character = "AnakinEp3", amount = 100}}},
+				{price = 3350, bundle = {{character = "AnakinEp3", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "BikerScout_sing1",
+			description = "BikerScout",
+			sprite = "BTN_BIKER_SCOUT",
+			buyButtons = {
+				{price = 150,  bundle = {{character = "BikerScout", amount = 10}}},
+				{price = 200,  bundle = {{character = "BikerScout", amount = 30}}},
+				{price = 500,  bundle = {{character = "BikerScout", amount = 100}}},
+				{price = 1000, bundle = {{character = "BikerScout", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "Stormtrooper_sing1",
+			description = "StormTrooper",
+			sprite = "BTN_STORM_TROOPER",
+			buyButtons = {
+				{price = 80,   bundle = {{character = "StormTrooper", amount = 10}}},
+				{price = 130,  bundle = {{character = "StormTrooper", amount = 30}}},
+				{price = 250,  bundle = {{character = "StormTrooper", amount = 100}}},
+				{price = 1000, bundle = {{character = "StormTrooper", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "TIEFighterPilot_sing1",
+			description = "TieFighterPilot",
+			sprite = "BTN_TIE_PILOT",
+			buyButtons = {
+				{price = 100,  bundle = {{character = "TieFighterPilot", amount = 10}}},
+				{price = 200,  bundle = {{character = "TieFighterPilot", amount = 30}}},
+				{price = 500,  bundle = {{character = "TieFighterPilot", amount = 100}}},
+				{price = 1000, bundle = {{character = "TieFighterPilot", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "DarthVader_sing1",
+			description = "DarthVader",
+			sprite = "BTN_VADER",
+			buyButtons = {
+				{price = 800,  bundle = {{character = "DarthVader", amount = 10}}},
+				{price = 1500, bundle = {{character = "DarthVader", amount = 30}}},
+				{price = 2000, bundle = {{character = "DarthVader", amount = 100}}},
+				{price = 3500, bundle = {{character = "DarthVader", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "BobaFett_sing1",
+			description = "BobaFett",
+			sprite = "BTN_BOBA_FETT",
+			buyButtons = {
+				{price = 600,  bundle = {{character = "BobaFett", amount = 10}}},
+				{price = 850,  bundle = {{character = "BobaFett", amount = 30}}},
+				{price = 1200, bundle = {{character = "BobaFett", amount = 100}}},
+				{price = 2000, bundle = {{character = "BobaFett", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "HoloDarthSidious_sing1",
+			description = "DarthSidiousHologram",
+			sprite = "BTN_HOLOGRAM_EMPEROR",
+			buyButtons = {
+				{price = 825,  bundle = {{character = "DarthSidiousHologram", amount = 10}}},
+				{price = 1550,  bundle = {{character = "DarthSidiousHologram", amount = 30}}},
+				{price = 2200, bundle = {{character = "DarthSidiousHologram", amount = 100}}},
+				{price = 3500, bundle = {{character = "DarthSidiousHologram", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "ShadowTrooper_sing1",
+			description = "ShadowTrooper",
+			sprite = "BTN_SHADOWTROOPER",
+			buyButtons = {
+				{price = 200,  bundle = {{character = "ShadowTrooper", amount = 10}}},
+				{price = 400,  bundle = {{character = "ShadowTrooper", amount = 30}}},
+				{price = 1200, bundle = {{character = "ShadowTrooper", amount = 100}}},
+				{price = 1800, bundle = {{character = "ShadowTrooper", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "RedBattleDroid_sing1",
+			description = "BattleDroidRed",
+			sprite = "BTN_BATTLE_DROID_RED",
+			buyButtons = {
+				{price = 100,  bundle = {{character = "BattleDroidRed", amount = 10}}},
+				{price = 200,  bundle = {{character = "BattleDroidRed", amount = 30}}},
+				{price = 500,  bundle = {{character = "BattleDroidRed", amount = 100}}},
+				{price = 1000, bundle = {{character = "BattleDroidRed", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "Shocktrooper_sing1",
+			description = "ShockTrooper",
+			sprite = "BTN_SHOCK_TROOPER",
+			buyButtons = {
+				{price = 200,  bundle = {{character = "ShockTrooper", amount = 10}}},
+				{price = 350,  bundle = {{character = "ShockTrooper", amount = 30}}},
+				{price = 800, bundle = {{character = "ShockTrooper", amount = 100}}},
+				{price = 1200, bundle = {{character = "ShockTrooper", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{	
+			id = "Jabba_sing1",
+			description = "Jabba",
+			sprite = "BTN_JABBA",
+			buyButtons = {
+				{price = 300,  bundle = {{character = "Jabba", amount = 10}}},
+				{price = 550,  bundle = {{character = "Jabba", amount = 30}}},
+				{price = 1200, bundle = {{character = "Jabba", amount = 100}}},
+				{price = 2000, bundle = {{character = "Jabba", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{
+			id = "RoyalGuard_sing1",
+			description = "RoyalGuard",
+			sprite = "BTN_CRIMSON_GUARD",
+			buyButtons = {
+				{price = 300,  bundle = {{character = "RoyalGuard", amount = 10}}},
+				{price = 550,  bundle = {{character = "RoyalGuard", amount = 30}}},
+				{price = 1200, bundle = {{character = "RoyalGuard", amount = 100}}},
+				{price = 2000, bundle = {{character = "RoyalGuard", amount = 1, type = "unlimited"}}},
+			}
+		},
+		{
+			id = "TuskenRaider_sing1",
+			description = "TuskenRaider",
+			sprite = "BTN_TUSKEN_RAIDER",
+			buyButtons = {
+				{price = 800,  bundle = {{character = "TuskenRaider", amount = 10}}},
+				{price = 1500,  bundle = {{character = "TuskenRaider", amount = 30}}},
+				{price = 2200, bundle = {{character = "TuskenRaider", amount = 100}}},
+				{price = 3000, bundle = {{character = "TuskenRaider", amount = 1, type = "unlimited"}}},
+			}
+		},
+	},
+	
+	bundlesCarousel = {
+		{
+			id = "HeroAndVillain_bund",
+			description = { 
+				en_EN = "Hero and Villain Bundle",
+				de_DE = "Paket „Held und Schurke“",
+				es_ES = "Paquete héroes y villanos",
+				fr_FR = "Bundle Héros et méchant",
+				it_IT = "Pacchetto Eroi e cattivi",
+				ja_JP = "ヒーローと悪党バンドル",
+				ru_RU = "Пакет «Герои и Злодеи»",
+				pt_BR = "Pacote Herói e Vilão",
+			},
+			backgroundIndex = "7",
+			reduction = "-45%",
+			buyButtons = {
+				{price = 299,  bundle = {{character = "Kanan", amount = 3}, {character = "Inquisitor", amount =  3},}},
+				
+			}
+		},
+		{
+			id = "BirdSideHoliday_bund",
+			description = {
+				en_EN = "Bird Side Holiday Bundle",
+				de_DE = "Feiertagspaket der Vogel-Seite",
+				es_ES = "Paquete navideño de la República Aviar",
+				fr_FR = "Bundle vacances Côté oiseaux",
+				it_IT = "Pacchetto Festività Lato Pennuto",
+				ja_JP = "バードサイド ホリデーバンドル",
+				ru_RU = "Пакет «Праздники» Птичьей Стороны",
+				pt_BR = "Pacote de Festas dos pássaros",
+			},
+			backgroundIndex = "7",
+			reduction = "-50%",
+			buyButtons = {
+				{price = 499,  bundle = {{character = "AnakinEp2", amount = 5}, {character = "Padme", amount = 5}, {character = "LukeJedi", amount = 5}, {character = "Leia", amount = 5}, }},
+				
+			}
+		},
+		{
+			id = "PorkSideHoliday_bund",
+			description = { 
+				en_EN = "Pork Side Holiday Bundle",
+				de_DE = "Feiertagspaket der Schweine-Seite",
+				es_ES = "Paquete navideño del Lado Gorrino",
+				fr_FR = "Bundle vacances Côté cochons",
+				it_IT = "Pacchetto Festività Lato Porcino",
+				ja_JP = "ポークサイド ホリデーバンドル",
+				ru_RU = "Пакет «Праздники» Свинской Стороны",
+				pt_BR = "Pacote de Festas dos porcos",
+			},
+			backgroundIndex = "7",
+			reduction = "-55%",
+			buyButtons = {
+				{price = 499,  bundle = {{character = "JangoFett", amount = 10}, {character = "BobaFett", amount = 10}, {character = "ShockTrooper", amount = 10}}},
+			}
+		},
+		
+	},
+}

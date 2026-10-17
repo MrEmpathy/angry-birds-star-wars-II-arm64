@@ -1,0 +1,8 @@
+data = {
+	isEnabled = false, -- is force update feature enabled
+	recommendedVersion = "1.9.0", -- version that is recommended to have, show notification if playing with older one
+	requiredVersion = "1.7.1", -- version of game that is required to play, older versions do not work anymore
+	timeAllowedForUpdate = 259200, -- how long player has time from first notification to update game before locking the game up if using older than required version
+	minimumIOSVersionRequired = "5.0", -- do not force update if using older iOS version than this
+	minimumAndroidVersionRequired = "2.3", -- do not force update if using older Android version than this
+}

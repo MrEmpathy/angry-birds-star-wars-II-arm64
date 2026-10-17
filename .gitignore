@@ -1,0 +1,20 @@
+# This PRIVATE repo holds the whole workspace: source, Rovio inputs (original/), the signing key
+# (keystore/), build outputs (bridge/out, bridge/gen, dist/) and the analysis workspace (work/).
+# Never make it public.
+
+# Test, debugging and cache output.
+/test-out/
+*.log
+*.idsig
+__pycache__/
+*.pyc
+
+# Test outputs and scratch inside the analysis workspace.
+/work/dec_test/
+/work/stage_test/
+/work/svc/x7/
+/work/*.bak
+
+# dexdump listings are over GitHub's 100 MB file limit; regenerate them from work/*_classes.dex with
+# build-tools/dexdump -d.
+/work/*_dexdump.txt

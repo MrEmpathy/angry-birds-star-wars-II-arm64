@@ -1,0 +1,93 @@
+com.adcolony.sdk.ADCCrashReportManager.initNativeCrashReporter([B)V
+com.adcolony.sdk.ADCGeneratedCrypto.nativeDecryptBase64([B[B[BI)[B
+static com.adcolony.sdk.ADCNative.EventTracker__logEvent(J[B)V
+static com.adcolony.sdk.ADCNative.nativeCreateSceneController(II)V
+static com.adcolony.sdk.ADCNative.nativeCreateTexture(IIILjava/lang/String;Ljava/nio/ByteBuffer;IIII)V
+static com.adcolony.sdk.ADCNative.nativeDeleteSceneController(II)V
+static com.adcolony.sdk.ADCNative.nativeHelloWorld()V
+static com.adcolony.sdk.ADCNative.nativeIsArm()Z
+static com.adcolony.sdk.ADCNative.nativeNeonSupported()Z
+static com.adcolony.sdk.ADCNative.nativeRender(IIII)V
+com.adcolony.sdk.ADCVMModule$ADCJSVirtualMachine.create(I[B[B)J
+com.adcolony.sdk.ADCVMModule$ADCJSVirtualMachine.delete(JI)V
+com.adcolony.sdk.ADCVMModule$ADCJSVirtualMachine.update(JI[B)[B
+com.rovio.fusion.AlertDialogWrapper.showAlertResultCallback(JJII)V
+com.rovio.fusion.AudioOutput.nativeMixData(J[BI)V
+com.rovio.fusion.CameraWrapper.nativeCameraStatus(JILjava/lang/String;)V
+com.rovio.fusion.CameraWrapper.nativeProcessFrame(J[BII)V
+com.rovio.fusion.HockeyAppWrapper.setUpBreakpad(Ljava/lang/String;)V
+com.rovio.fusion.LocalNotificationsWrapper.notificationReceived(Ljava/lang/String;)V
+com.rovio.fusion.LocationWrapper.locationChangedCallback(JDDDF)V
+com.rovio.fusion.LocationWrapper.providerDisabledCallback(JLjava/lang/String;)V
+com.rovio.fusion.LocationWrapper.providerEnabledCallback(JLjava/lang/String;)V
+com.rovio.fusion.LocationWrapper.statusChangedCallback(JLjava/lang/String;I)V
+com.rovio.fusion.MyInputHandler.nativeInput(IFFI)V
+com.rovio.fusion.MyInputHandler.nativeInputAxis(IFI)V
+com.rovio.fusion.MyInputHandler.nativeKeyInput(IIII)V
+com.rovio.fusion.MyInputHandler.nativeLoadFromUrl(Ljava/lang/String;)V
+com.rovio.fusion.NativeApplication.nativeConfig(Ljava/lang/String;)V
+com.rovio.fusion.NativeApplication.nativeDeinit()V
+com.rovio.fusion.NativeApplication.nativeFrameClear()V
+com.rovio.fusion.NativeApplication.nativeGetPossibleOrientations()I
+com.rovio.fusion.NativeApplication.nativeInit(II)V
+com.rovio.fusion.NativeApplication.nativeInterruptRender()V
+com.rovio.fusion.NativeApplication.nativePause()V
+com.rovio.fusion.NativeApplication.nativeRender()Z
+com.rovio.fusion.NativeApplication.nativeRenderThread()Z
+com.rovio.fusion.NativeApplication.nativeResize(II)Z
+com.rovio.fusion.NativeApplication.nativeResume()V
+com.rovio.fusion.NativeApplication.nativeUpdate()Z
+com.rovio.fusion.RemoteNotificationsClientWrapper.announceRemoteMessage(Ljava/lang/String;)V
+com.rovio.fusion.RemoteNotificationsClientWrapper.announceRemoteRegistrationID(Ljava/lang/String;)V
+static com.rovio.fusion.Share.onShareClosed(I)V
+com.rovio.fusion.VideoPlayer.announceOnPause(JF)V
+com.rovio.fusion.VideoPlayer.announceOnResume(JF)V
+com.rovio.fusion.VideoPlayer.onExtraButtonClicked(JLjava/lang/String;)V
+com.rovio.fusion.VideoPlayer.onPlay(JF)V
+com.rovio.fusion.VideoPlayer.onVideoStarted(J)V
+com.rovio.fusion.VideoPlayerBridge.onVideoEnded(JZIFF)V
+com.rovio.fusion.VideoPlayerBridge.onVideoPaused(JZIFF)V
+com.rovio.fusion.WebViewWrapper.callNativeFunction(JLjava/lang/String;)V
+com.rovio.fusion.WebViewWrapper.linkClickedCallback(JLjava/lang/String;)I
+com.rovio.fusion.WebViewWrapper.urlLoadedCallback(JZLjava/lang/String;)V
+com.rovio.rcs.IdentityLoginUI.backButtonPressed(J)V
+com.rovio.rcs.IdentityLoginUI.checkEmail(JLjava/lang/String;)V
+com.rovio.rcs.IdentityLoginUI.checkPassword(JLjava/lang/String;)V
+com.rovio.rcs.IdentityLoginUI.onButtonClicked(JI)V
+com.rovio.rcs.IdentityLoginUI.onRegisterNewAccount(JLjava/lang/String;Ljava/lang/String;IIILjava/lang/String;I)V
+com.rovio.rcs.IdentityLoginUI.onRequestNewPassword(JLjava/lang/String;)V
+com.rovio.rcs.IdentityLoginUI.onSignInClicked(JLjava/lang/String;Ljava/lang/String;)V
+static com.rovio.rcs.InstallReferrerReceiver.sendReferrer(Ljava/lang/String;)V
+com.rovio.rcs.ads.AdsSdk.onAdError(JILjava/lang/String;)V
+com.rovio.rcs.ads.AdsSdk.onAdHidden(JZ)V
+com.rovio.rcs.ads.AdsSdk.onAdReady(JZ)V
+com.rovio.rcs.ads.AdsSdk.onAdShown(J)V
+com.rovio.rcs.ads.AdsSdk.onAdSizeChanged(JII)V
+com.rovio.rcs.ads.AdsSdk.onClick(J)V
+com.rovio.rcs.ads.VideoPlayerBridge.onCustomControlClicked(JLjava/lang/String;F)V
+com.rovio.rcs.ads.VideoPlayerBridge.onEndCardClick(JLjava/lang/String;)V
+com.rovio.rcs.ads.VideoPlayerBridge.onEndCardReady(JZ)V
+com.rovio.rcs.ads.VideoPlayerBridge.onEndCardTrackEvent(JLjava/lang/String;Ljava/lang/String;)V
+com.rovio.rcs.ads.VideoPlayerBridge.onVideoEnded(JZF)V
+com.rovio.rcs.ads.VideoPlayerBridge.onVideoTrackEvent(JLjava/lang/String;)V
+com.rovio.rcs.ads.WebViewWrapper.linkClickedCallback(JLjava/lang/String;)V
+com.rovio.rcs.ads.WebViewWrapper.rovioTrackEvent(JLjava/lang/String;Ljava/lang/String;)V
+com.rovio.rcs.ads.WebViewWrapper.urlLoadedCallback(JZ)V
+com.rovio.rcs.ads.WebViewWrapper.videoEnded(JLjava/lang/String;F)V
+com.rovio.rcs.ads.WebViewWrapper.videoStarted(J)V
+com.rovio.rcs.ads.WebViewWrapper.viewCollapsedCallback(J)V
+com.rovio.rcs.ads.WebViewWrapper.viewExpandedCallback(J)V
+com.rovio.rcs.ads.WebViewWrapper.viewHiddenCallback(J)V
+static com.rovio.rcs.core.Utils.handleReferrerNotSupported()V
+static com.rovio.rcs.core.Utils.handleReferrerValue(Ljava/lang/String;JJ)V
+static com.rovio.rcs.payment.google.GooglePlayPaymentProvider.initFinished(JZ)V
+static com.rovio.rcs.payment.google.GooglePlayPaymentProvider.paymentFinished(JLjava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+static com.rovio.rcs.payment.google.GooglePlayPaymentProvider.restoreDone(J)V
+static com.rovio.rcs.payment.google.GooglePlayPaymentProvider.restoreFailed(J)V
+static com.rovio.rcs.payment.google.GooglePlayPaymentProvider.skuDetailsLoaded(J[Lcom/rovio/rcs/payment/google/SkuDetails;)V
+com.rovio.rcs.socialnetwork.SocialManagerWrapper.onGetFriendsCallback(JLjava/lang/String;I)V
+com.rovio.rcs.socialnetwork.SocialManagerWrapper.onGetUserProfileCallback(JLjava/lang/String;I)V
+com.rovio.rcs.socialnetwork.SocialManagerWrapper.onLoginCompleteCallback(JLjava/lang/String;ZI)V
+com.rovio.rcs.socialnetwork.SocialManagerWrapper.onSendAppInviteRequestCallback(JLcom/rovio/rcs/socialnetwork/SocialServiceResponse;I)V
+com.rovio.rcs.socialnetwork.SocialManagerWrapper.onSendAppRequestCallback(JLcom/rovio/rcs/socialnetwork/SocialServiceResponse;I)V
+com.rovio.rcs.socialnetwork.SocialManagerWrapper.onShareCallback(JLcom/rovio/rcs/socialnetwork/SocialServiceResponse;I)V

@@ -1,0 +1,9 @@
+local L0_1, L1_1
+L0_1 = {}
+L0_1.isEnabled = false
+L0_1.recommendedVersion = "1.9.0"
+L0_1.requiredVersion = "1.7.1"
+L0_1.timeAllowedForUpdate = 259200
+L0_1.minimumIOSVersionRequired = "5.0"
+L0_1.minimumAndroidVersionRequired = "2.3"
+data = L0_1

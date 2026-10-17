@@ -1,0 +1,155 @@
+data = 
+{
+	deviceModels = 
+	{
+		--GALAXY Note 8.0
+		["GT-N5100"] = "GALAXY Note 8.0",
+		["GT-N5105"] = "GALAXY Note 8.0",
+		
+		--GALAXY Note 8.0 LTE
+		["GT-N5120"] = "GALAXY Note 8.0",
+		["SGH-I467"] = "GALAXY Note 8.0",
+		["SAMSUNG-SGH-I467"] = "GALAXY Note 8.0", -- just to make sure that it works, got from test device
+
+		--GALAXY Tab 3 (10.1)
+		["GT-P5200"] = "GALAXY Tab 3",
+		
+		--GALAXY Tab 3 LTE(10.1)
+		["GT-P5220"] = "GALAXY Tab 3",
+		
+		--GALAXY Tab 3 (8.0)
+		["SM-T311"] = "GALAXY Tab 3",
+		
+		--GALAXY Tab 3 LTE (8.0)
+		["SM-T315"] = "GALAXY Tab 3",
+		
+		--GALAXY Note Wi-Fi 8.0
+		["GT-N5110"]  = "GALAXY Note 8.0",
+		["SHW-M500W"]  = "GALAXY Note 8.0",
+		
+		--GALAXY Tab 3 Wi-Fi (10.1)
+		["GT-P5210"] = "GALAXY Tab 3",
+		
+		--GALAXY Tab 3 Wi-Fi (8.0)
+		["SM-T310"] = "GALAXY Tab 3",
+		
+		--GALAXY Tab 3 (7.0)
+		["SM-T211"] = "GALAXY Tab 3",
+		["SM-T210R"] = "GALAXY Tab 3",
+		["SM-T210X"] = "GALAXY Tab 3",
+		["SM-T212"] = "GALAXY Tab 3",
+		
+		--GALAXY Tab 3 LTE (7.0)
+		["SM-T217A"] = "GALAXY Tab 3",
+		["SM-T217S"] = "GALAXY Tab 3",
+		["SM-T215"] = "GALAXY Tab 3",
+		
+		--GALAXY Tab 3 Wi-Fi (7.0)
+		["SM-T210"] = "GALAXY Tab 3",
+		["SM-T210L"] = "GALAXY Tab 3",
+		
+		["SM-T2105"] = "GALAXY Tab 3",
+		
+		--GALAXY S4 mini
+		["GT-I9195"] = "GALAXY S4 Mini",
+		["GT-I9192"] = "GALAXY S4 Mini",
+		["SHV-E370D"] = "GALAXY S4 Mini",
+		["SGH-I257"] = "GALAXY S4 Mini",
+		["GT-I9197"] = "GALAXY S4 Mini",
+		["SGH-I257M"] = "GALAXY S4 Mini",
+		["GT-I9190"] = "GALAXY S4 Mini",
+		["GT-I9195X"] = "GALAXY S4 Mini",
+		["GT-I9195Z"] = "GALAXY S4 Mini",
+		["SPH-L520"] = "GALAXY S4 Mini",
+		
+		--GALAXY Note II
+		["GT-N7100"] = "GALAXY Note 2",
+		["GT-N7105"] = "GALAXY Note 2",
+		["SGH-T889"] = "GALAXY Note 2",
+		["SGH-T889V"] = "GALAXY Note 2",
+		["SHV-E250S"] = "GALAXY Note 2",
+		["SHV-E250K"] = "GALAXY Note 2",
+		["SHV-E250L"] = "GALAXY Note 2",
+		["GT-N7105T"] = "GALAXY Note 2",
+		["SC-02E(SGH-N025)"] = "GALAXY Note 2",
+		["SC-02E"] = "GALAXY Note 2", -- just to make sure that it will work
+		["SGH-N025"] = "GALAXY Note 2", -- just to make sure that it will work
+		["SCH-N719"] = "GALAXY Note 2",
+		["GT-N7102"] = "GALAXY Note 2",
+		["SGH-I317M"] = "GALAXY Note 2",
+		["GT-N7100T"] = "GALAXY Note 2",
+		["SGH-I317"] = "GALAXY Note 2",
+		["SCH-I605"] = "GALAXY Note 2",
+		["SCH-R950"] = "GALAXY Note 2",
+		["SPH-L900"] = "GALAXY Note 2",
+		
+		--GALAXY SIII mini
+		["GT-I8190"] = "GALAXY S3 Mini",
+		["GT-I8190N"] = "GALAXY S3 Mini",
+		["GT-I8190L"] = "GALAXY S3 Mini",
+		["GT-I8190T"] = "GALAXY S3 Mini",
+		["SM-G730A"] = "GALAXY S3 Mini",
+		
+		-- GALAXY Note 3
+		["SM-N9005"] = "GALAXY Note 3",
+		["SM-N900W8"] = "GALAXY Note 3",
+		["SM-N900S"] = "GALAXY Note 3",
+		["SM-N900K"] = "GALAXY Note 3",
+		["SM-N900L"] = "GALAXY Note 3",
+		["SM-N900D"] = "GALAXY Note 3",
+		["SM-N900J"] = "GALAXY Note 3",
+		["SM-N900A"] = "GALAXY Note 3",
+		["SM-N900T"] = "GALAXY Note 3",
+		["SM-N900V"] = "GALAXY Note 3",
+		["SM-N900R4"] = "GALAXY Note 3",
+		["SM-N900"] = "GALAXY Note 3",
+		["SM-N9000Q"] = "GALAXY Note 3",
+		["SM-N9008"] = "GALAXY Note 3",
+		["SM-N9002"] = "GALAXY Note 3",
+		["SM-N9006"] = "GALAXY Note 3",
+		["SM-N9009"] = "GALAXY Note 3",
+		["SCL22"] = "GALAXY Note 3",
+		["SC-01F"] = "GALAXY Note 3",
+		["SM-N9006"] = "GALAXY Note 3",
+		["SM-N900P"] = "GALAXY Note 3",
+		["SM-N900R"] = "GALAXY Note 3",
+		["SM-N900X"] = "GALAXY Note 3",
+		["SM-N9008V"] = "GALAXY Note 3",
+		
+		["SM-N900J_SM-V700"] = "GALAXY Note 3",
+		["SM-N900L_SM-V700"] = "GALAXY Note 3",
+		["SM-N9009_SM-V700"] = "GALAXY Note 3",
+		["SM-N900W8_SM-V700"] = "GALAXY Note 3",
+		["SCL22_SM-V700"] = "GALAXY Note 3",
+		["SC-01F_SM-V700"] = "GALAXY Note 3",
+		["SM-N9006_SM-V700"] = "GALAXY Note 3",
+		["SM-N900V_SM-V700"] = "GALAXY Note 3",
+		["SM-N900A_SM-V700"] = "GALAXY Note 3",
+		["SM-N900_SM-V700"] = "GALAXY Note 3",
+		["SM-N900P_SM-V700"] = "GALAXY Note 3",
+		["SM-N900R_SM-V700"] = "GALAXY Note 3",
+		["SM-N9008_SM-V700"] = "GALAXY Note 3",
+		["SM-N900S_SM-V700"] = "GALAXY Note 3",
+		["SM-N900D_SM-V700"] = "GALAXY Note 3",
+		["SM-N9005_SM-V700"] = "GALAXY Note 3",
+		["SM-N900T_SM-V700"] = "GALAXY Note 3",
+		["SM-N9002_SM-V700"] = "GALAXY Note 3",
+		["SM-N900K_SM-V700"] = "GALAXY Note 3",
+		["SM-N900R4_SM-V700"] = "GALAXY Note 3",
+		
+		-- Samsung GALAXY Note 10.1
+		["SM-P600"] = "GALAXY Note 10.1",
+		["SM-P601"] = "GALAXY Note 10.1",
+		["SM-P902"] = "GALAXY Note 10.1",
+		["SM-P605"] = "GALAXY Note 10.1",
+		["SM-P602"] = "GALAXY Note 10.1",
+		["SM-P605S"] = "GALAXY Note 10.1",
+		["SM-P605K"] = "GALAXY Note 10.1",
+		["SM-P605L"] = "GALAXY Note 10.1",
+		["SM-P605M"] = "GALAXY Note 10.1",
+		["SM-P902_SM-V700"] = "GALAXY Note 10.1",
+		["SM-P605_SM-V700"] = "GALAXY Note 10.1",
+		["SM-P601_SM-V700"] = "GALAXY Note 10.1",
+		["SM-P602_SM-V700"] = "GALAXY Note 10.1",
+	}
+}
